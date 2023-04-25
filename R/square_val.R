@@ -19,3 +19,6 @@
 square_val <- function(x) {
   paste("Your value squared is:",x^2)
 }
+
+
+#testcomment.
