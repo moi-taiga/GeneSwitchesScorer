@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/404.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/reference/hello.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/create_racing_lines.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/filter_gene_expression_for_switching_genes.html</loc>
   </url>
   <url>
-    <loc>/reference/square_val.html</loc>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/flatten_cell_frequencies_moi.html</loc>
+  </url>
+  <url>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/flatten_cell_frequencies_owen.html</loc>
+  </url>
+  <url>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/hello.html</loc>
+  </url>
+  <url>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/select_evenly_distributed_switching_genes.html</loc>
+  </url>
+  <url>
+    <loc>https://moi-taiga.github.io/GeneSwitchesScorer/reference/square_val.html</loc>
   </url>
 </urlset>
