@@ -1,8 +1,10 @@
 Package: GeneSwitchesScorer
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Identifies Progression of a Sample on a Trajectory
 Version: 0.1.0
-Author: Who wrote it
+Authors@R:
+    person("Moi", "Taiga Nicholas", , "mtn1n22@soton.ac.uk", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-5609-868X"))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
@@ -12,3 +14,5 @@ LazyData: true
 RoxygenNote: 7.2.3
 URL: https://github.com/moi-taiga/GeneSwitchesScorer
 BugReports: https://github.com/moi-taiga/GeneSwitchesScorer/issues
+Imports: 
+    GeneSwitches
