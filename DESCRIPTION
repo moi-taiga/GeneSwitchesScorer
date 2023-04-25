@@ -1,13 +1,11 @@
 Package: GeneSwitchesScorer
-Type: Package
 Title: Identifies Progression of a Sample on a Trajectory
 Version: 0.1.0
 Authors@R:
     person("Moi", "Taiga Nicholas", , "mtn1n22@soton.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-5609-868X"))
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This package identifies the progression of a sample on a trajectory by scoring the expression levels of switching genes. 
+    It depends on the GeneSwitches package for gene switch identification.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
