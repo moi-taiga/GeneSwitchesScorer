@@ -7,8 +7,17 @@
 select_evenly_distributed_switching_genes(sg_allgenes, min_time_spacing)
 }
 \arguments{
-\item{min_time_spacing}{}
+\item{sg_allgenes}{Filtered Switching Genes from Gene Switches. (dont use `topnum` instead choose a Psvalue cutoff )}
+
+\item{min_time_spacing}{The minimum distance between genes when evenly distributing.}
+}
+\value{
+Switching genes which are evenly distributed through pseudotime at a selected density.
 }
 \description{
 Select Evenly Distributed Switching Genes
+}
+\examples{
+select_evenly_distributed_switching_genes(sg_allgenes, 8)
+
 }

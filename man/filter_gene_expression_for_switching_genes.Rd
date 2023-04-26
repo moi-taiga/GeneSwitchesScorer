@@ -10,7 +10,7 @@ filter_gene_expression_for_switching_genes(
 )
 }
 \arguments{
-\item{gs_scorer_genes}{}
+\item{gs_scorer_genes}{Switching genes which are evenly distributed through pseudotime..}
 }
 \description{
 Create a reduced binary expression matrix for only the selected switching genes,
