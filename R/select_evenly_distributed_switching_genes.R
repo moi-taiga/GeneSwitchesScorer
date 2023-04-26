@@ -1,7 +1,10 @@
 #' @title Select Evenly Distributed Switching Genes
 #'
-#' @param sg_allgenes
-#' @param min_time_spacing
+#' @descripton Filters switching genes from GenesSwitches to provide you with switching genes which are evenly distributed through pseudotime,
+#'     at a selected density.
+#'
+#' @param sg_allgenes  - Filtered Switching Genes from Gene Switches. (dont use `topnum` instead choose a Psvalue cutoff )
+#' @param min_time_spacing - The minimum distance between genes when evenly distributing.
 #'
 #' @return
 #' @export

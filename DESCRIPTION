@@ -6,12 +6,11 @@ Authors@R:
            comment = c(ORCID = "0000-0002-5609-868X"))
 Description: This package identifies the progression of a sample on a trajectory by scoring the expression levels of switching genes. 
     It depends on the GeneSwitches package for gene switch identification.
-License: GPL (>= 3)
+License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 URL: https://github.com/moi-taiga/GeneSwitchesScorer,
     https://moi-taiga.github.io/GeneSwitchesScorer/
 BugReports: https://github.com/moi-taiga/GeneSwitchesScorer/issues
-Imports: 
-    GeneSwitches
+Imports:
