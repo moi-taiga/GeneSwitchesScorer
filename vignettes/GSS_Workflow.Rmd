@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-
+## This workflow
+This workflow will take you through using GSS on "patient data" to identify progression towards Tcell exhaustion. 
 
 ### Necessary Packages for this Example Workflow: 
 ```{r setup}
@@ -32,3 +33,7 @@ library(GeneSwitchesScorer)
 ```
 
 ## Input Datasets
+This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Oncology" **TODO REF**:\
+https://zenodo.org/record/5205544 \
+It also uses **###** as the sample/patient data. 
+
