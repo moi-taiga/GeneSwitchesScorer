@@ -14,6 +14,19 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+Necessary Packages for this Example Workflow: 
 ```{r setup}
 library(GeneSwitchesScorer)
+# library(GeneSwitches)
+# library(slingshot)
+# library(Seurat)
+#
+# library(RColorBrewer)
+# library(data.table)
+# library(reticulate)
+# library(patchwork)
+# library(parallel)
+# library(ggplot2)
+# library(Matrix)
 ```
