@@ -9,6 +9,10 @@ flatten_cell_frequencies_moi(list_of_cell_position_frequencies)
 \arguments{
 \item{list_of_cell_position_frequencies}{}
 }
+\value{
+A flat matrix where each column represents a position along a trajectory,
+    and each value is proportional to the number of the sample's cells which are at that position.
+}
 \description{
 Combining all cells racing lines with out binerization (Moi's way).
 }

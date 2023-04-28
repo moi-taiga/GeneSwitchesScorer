@@ -6,11 +6,9 @@
 #'
 #' @param list_of_cell_position_frequencies
 #'
-#' @return
+#' @return A flat matrix where each column represents a position along a trajectory,
+#'     and each value is proportional to the number of the sample's cells which are at that position.
 #' @export
-#'
-#' @examples
-#'
 flatten_cell_frequencies_owen <- function(list_of_cell_position_frequencies) {
   all_patient_cells_scored_flat <- list()
   length_of_list <- length(list_of_cell_position_frequencies)

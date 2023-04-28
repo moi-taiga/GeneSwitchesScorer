@@ -5,12 +5,11 @@
 #'     This can be later aggregated to estimate the position of the sample along the trajectory.
 #'
 #' @param reduced_binary_counts_matrix a matrix of your samples binary gene expression.
-#' @param gs_scorer_genes Switching genes which are evenly distributed through pseudotime
+#' @param gs_scorer_genes Switching genes which are evenly distributed through pseudotime.
 #'
-#' @return
+#' @return A list of matrices: A matrix for each cell where the columns represent progress through a trajectory,
+#'     and the rows represent genes, values indicate a likely position of the cell upon the trajectory based that genes bianrized expression.
 #' @export
-#'
-#' @examples create_racing_lines(reduced_binary_counts_matrix,gs_scorer_genes)
 #'
 create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
   all_patients_cells_scored<-list()

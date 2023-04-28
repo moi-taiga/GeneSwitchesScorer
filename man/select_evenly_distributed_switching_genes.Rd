@@ -15,9 +15,5 @@ select_evenly_distributed_switching_genes(sg_allgenes, min_time_spacing)
 Switching genes which are evenly distributed through pseudotime at a selected density.
 }
 \description{
-Select Evenly Distributed Switching Genes
-}
-\examples{
-select_evenly_distributed_switching_genes(sg_allgenes, 8)
-
+Filters switching genes from GenesSwitches.
 }

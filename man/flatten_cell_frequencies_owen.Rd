@@ -9,6 +9,10 @@ flatten_cell_frequencies_owen(list_of_cell_position_frequencies)
 \arguments{
 \item{list_of_cell_position_frequencies}{}
 }
+\value{
+A flat matrix where each column represents a position along a trajectory,
+    and each value is proportional to the number of the sample's cells which are at that position.
+}
 \description{
 # Combining all cells racing lines after binerization (Owen's way)
     TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive.
