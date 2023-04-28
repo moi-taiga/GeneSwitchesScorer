@@ -6,7 +6,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of GeneSwitchesScorer is to …
+The goal of GeneSwitchesScorer is to 
 
 ## Installation
 
