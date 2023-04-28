@@ -1,0 +1,19 @@
+---
+title: "GSS_Workflow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{GSS_Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(GeneSwitchesScorer)
+```
