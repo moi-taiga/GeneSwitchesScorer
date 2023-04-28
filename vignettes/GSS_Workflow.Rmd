@@ -23,6 +23,8 @@ library(GeneSwitchesScorer)
 # library(slingshot)
 # library(Seurat)
 #
+# library(SeuratObject)
+# library(sp)
 # library(RColorBrewer)
 # library(data.table)
 # library(reticulate)
@@ -33,11 +35,15 @@ library(GeneSwitchesScorer)
 ```
 
 ## Input Datasets
-This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Oncology" **TODO REF**:\
+This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Oncology" \
+**TODO REF**:\
 https://zenodo.org/record/5205544 \
 It also uses **###** as the sample/patient data. 
 ```{r}
-atlas.seu <- readRDS("/somwhere/on/my/pc/mini_TICAtlas.rds")
-pre.seu   <- readRDS("/mainfs/ddnb/GeneSwitchesScorer/mini_PRE.rds")
-post.seu  <- readRDS("/mainfs/ddnb/GeneSwitchesScorer/mini_POST.rds")
+atlas.seu <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_TICAtlas.rds")
+pre.seu   <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_PRE.rds")
+post.seu  <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_POST.rds")
+atlas.seu <- readRDS("mini_data/mini_TICAtlas.rds")
+pre.seu   <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_PRE.rds")
+post.seu  <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_POST.rds")
 ```
