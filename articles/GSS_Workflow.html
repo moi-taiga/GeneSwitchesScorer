@@ -91,6 +91,8 @@ identify progression towards Tcell exhaustion.</p>
 <span><span class="co"># library(slingshot)</span></span>
 <span><span class="co"># library(Seurat)</span></span>
 <span><span class="co">#</span></span>
+<span><span class="co"># library(SeuratObject)</span></span>
+<span><span class="co"># library(sp)</span></span>
 <span><span class="co"># library(RColorBrewer)</span></span>
 <span><span class="co"># library(data.table)</span></span>
 <span><span class="co"># library(reticulate)</span></span>
@@ -104,8 +106,12 @@ identify progression towards Tcell exhaustion.</p>
 <h2 id="input-datasets">Input Datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
 </h2>
 <p>This workflow uses data from “A Single-Cell Tumor Immune Atlas for
-Precision Oncology” <strong>TODO REF</strong>:<br><a href="https://zenodo.org/record/5205544" class="external-link uri">https://zenodo.org/record/5205544</a><br>
+Precision Oncology”<br><strong>TODO REF</strong>:<br><a href="https://zenodo.org/record/5205544" class="external-link uri">https://zenodo.org/record/5205544</a><br>
 It also uses <strong>###</strong> as the sample/patient data.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_TICAtlas.rds"</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_PRE.rds"</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_POST.rds"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
