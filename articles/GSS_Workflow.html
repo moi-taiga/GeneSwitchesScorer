@@ -77,14 +77,14 @@
 
     
     
-<div class="section level2">
-<h2 id="this-workflow">This workflow<a class="anchor" aria-label="anchor" href="#this-workflow"></a>
-</h2>
+<div class="section level3">
+<h3 id="this-workflow">This workflow<a class="anchor" aria-label="anchor" href="#this-workflow"></a>
+</h3>
 <p>This workflow will take you through using GSS on “patient data” to
 identify progression towards Tcell exhaustion.</p>
-<div class="section level3">
-<h3 id="necessary-packages-for-this-example-workflow">Necessary Packages for this Example Workflow:<a class="anchor" aria-label="anchor" href="#necessary-packages-for-this-example-workflow"></a>
-</h3>
+<div class="section level4">
+<h4 id="necessary-packages-for-this-example-workflow">Necessary Packages for this Example Workflow:<a class="anchor" aria-label="anchor" href="#necessary-packages-for-this-example-workflow"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moi-taiga/GeneSwitchesScorer" class="external-link">GeneSwitchesScorer</a></span><span class="op">)</span></span>
 <span><span class="co"># library(GeneSwitches)</span></span>
@@ -102,9 +102,9 @@ identify progression towards Tcell exhaustion.</p>
 <span><span class="co"># library(Matrix)</span></span></code></pre></div>
 </div>
 </div>
-<div class="section level2">
-<h2 id="input-datasets">Input Datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
-</h2>
+<div class="section level3">
+<h3 id="input-datasets">Input Datasets<a class="anchor" aria-label="anchor" href="#input-datasets"></a>
+</h3>
 <p>This workflow uses data from “A Single-Cell Tumor Immune Atlas for
 Precision Oncology”<br><strong>TODO REF</strong>:<br><a href="https://zenodo.org/record/5205544" class="external-link uri">https://zenodo.org/record/5205544</a><br>
 It also uses <strong>###</strong> as the sample/patient data.</p>
@@ -112,6 +112,103 @@ It also uses <strong>###</strong> as the sample/patient data.</p>
 <code class="sourceCode R"><span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_TICAtlas.rds"</span><span class="op">)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_PRE.rds"</span><span class="op">)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_POST.rds"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="data-manipulation-">Data manipulation.<a class="anchor" aria-label="anchor" href="#data-manipulation-"></a>
+</h3>
+<div class="section level4">
+<h4 id="sctransform">SCTransform<a class="anchor" aria-label="anchor" href="#sctransform"></a>
+</h4>
+<div class="section level5">
+<h5 id="todo-mtn---i-need-to-understand-what-this-does-">
+<em>TODO: MTN - I need to understand what this does.</em><a class="anchor" aria-label="anchor" href="#todo-mtn---i-need-to-understand-what-this-does-"></a>
+</h5>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#sctransforming the downsampled atlas object</span></span>
+<span><span class="va">seu_ds</span> <span class="op">&lt;-</span> <span class="fu">SCTransform</span><span class="op">(</span><span class="va">seu_ds</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="subsetting-them-to-get-more-cells-in-each-sample">Subsetting them to get more cells in each sample<a class="anchor" aria-label="anchor" href="#subsetting-them-to-get-more-cells-in-each-sample"></a>
+</h4>
+<div class="section level5">
+<h5 id="todo-mtn---i-dont-understand-this-comment-">
+<em>TODO: MTN - I dont understand this comment.</em><a class="anchor" aria-label="anchor" href="#todo-mtn---i-dont-understand-this-comment-"></a>
+</h5>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pre.seu</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">post.seu</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="label-transfer-so-consistency-is-maintained-from-atlas-and-patient-sample-dataset-annotation">Label transfer so consistency is maintained from atlas and patient
+sample dataset annotation<a class="anchor" aria-label="anchor" href="#label-transfer-so-consistency-is-maintained-from-atlas-and-patient-sample-dataset-annotation"></a>
+</h4>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">post_anchors</span> <span class="op">&lt;-</span> <span class="fu">FindTransferAnchors</span><span class="op">(</span></span>
+<span>  reference <span class="op">=</span> <span class="va">seu_ds</span>,</span>
+<span>  query <span class="op">=</span> <span class="va">PTCL_POST</span>,</span>
+<span>  normalization.method <span class="op">=</span> <span class="st">"SCT"</span>,</span>
+<span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span>,</span>
+<span>  dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">50</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">PTCL_POST</span> <span class="op">&lt;-</span> <span class="fu">MapQuery</span><span class="op">(</span></span>
+<span>  anchorset <span class="op">=</span> <span class="va">post_anchors</span>,</span>
+<span>  query <span class="op">=</span> <span class="va">PTCL_POST</span>,</span>
+<span>  reference <span class="op">=</span> <span class="va">seu_ds</span>,</span>
+<span>  refdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    cell_type <span class="op">=</span> <span class="st">"cell_type"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pre_anchors</span> <span class="op">&lt;-</span> <span class="fu">FindTransferAnchors</span><span class="op">(</span></span>
+<span>  reference <span class="op">=</span> <span class="va">seu_ds</span>,</span>
+<span>  query <span class="op">=</span> <span class="va">PTCL_PRE</span>,</span>
+<span>  normalization.method <span class="op">=</span> <span class="st">"SCT"</span>,</span>
+<span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span>,</span>
+<span>  dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">50</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">PTCL_PRE</span> <span class="op">&lt;-</span> <span class="fu">MapQuery</span><span class="op">(</span></span>
+<span>  anchorset <span class="op">=</span> <span class="va">pre_anchors</span>,</span>
+<span>  query <span class="op">=</span> <span class="va">PTCL_PRE</span>,</span>
+<span>  reference <span class="op">=</span> <span class="va">seu_ds</span>,</span>
+<span>  refdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    cell_type <span class="op">=</span> <span class="st">"cell_type"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>#Setting a threshold</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">PTCL_POST</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type.score</span> <span class="op">&gt;</span> <span class="fl">0.65</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">PTCL_PRE</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type.score</span> <span class="op">&gt;</span> <span class="fl">0.65</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">PTCL_POST_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_POST_ss</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">PTCL_POST_ss</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="view-plot">view plot?<a class="anchor" aria-label="anchor" href="#view-plot"></a>
+</h2>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">DimPlot</span><span class="op">(</span><span class="va">PTCL_POST_ss</span>,reduction<span class="op">=</span><span class="st">"umap"</span>,label<span class="op">=</span><span class="cn">T</span>,pt.size<span class="op">=</span><span class="fl">1</span>,group.by<span class="op">=</span><span class="st">"predicted.cell_type"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span><span class="op">)</span></span>
+<span><span class="va">PTCL_PRE_ss</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">DimPlot</span><span class="op">(</span><span class="va">PTCL_PRE_ss</span>,reduction<span class="op">=</span><span class="st">"umap"</span>,label<span class="op">=</span><span class="cn">T</span>,pt.size<span class="op">=</span><span class="fl">1</span>,group.by<span class="op">=</span><span class="st">"predicted.cell_type"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
