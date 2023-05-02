@@ -40,7 +40,7 @@ This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Onc
 https://zenodo.org/record/5205544 \
 It also uses **###** as the sample/patient data. 
 ```{r}
-atlas.seu <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_TICAtlas.rds")
+atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
 pre.seu   <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_PRE.rds")
 post.seu  <- readRDS("/C:/Users/mtn1n22/OneDrive - University of Southampton/Desktop/mini_data/mini_POST.rds")
 atlas.seu <- readRDS("mini_data/mini_TICAtlas.rds")
