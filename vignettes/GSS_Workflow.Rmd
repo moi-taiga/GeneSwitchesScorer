@@ -44,3 +44,92 @@ atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
 pre.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_PRE.rds")
 post.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_POST.rds")
 ```
+
+## Data manipulation.
+
+### SCTransform 
+#### *TODO: MTN - I need to understand what this does.*
+```{r, eval=FALSE}
+#sctransforming the downsampled atlas object
+seu_ds <- SCTransform(seu_ds, verbose = FALSE)
+```
+
+### Subsetting them to get more cells in each sample
+#### *TODO: MTN - I dont understand this comment.*
+```{r, eval=FALSE}
+pre.seu <- subset(pre.seu, subset = nFeature_RNA > 200)
+post.seu <- subset(post.seu, subset = nFeature_RNA > 200)
+```
+
+### Label transfer so consistency is maintained from atlas and patient sample dataset annotation
+
+```{r, eval=FALSE}
+post_anchors <- FindTransferAnchors(
+  reference = seu_ds,
+  query = PTCL_POST,
+  normalization.method = "SCT",
+  reference.reduction = "pca",
+  dims = 1:50
+)
+
+PTCL_POST <- MapQuery(
+  anchorset = post_anchors,
+  query = PTCL_POST,
+  reference = seu_ds,
+  refdata = list(
+    cell_type = "cell_type"
+  ),
+  reference.reduction = "pca"
+)
+
+pre_anchors <- FindTransferAnchors(
+  reference = seu_ds,
+  query = PTCL_PRE,
+  normalization.method = "SCT",
+  reference.reduction = "pca",
+  dims = 1:50
+)
+
+PTCL_PRE <- MapQuery(
+  anchorset = pre_anchors,
+  query = PTCL_PRE,
+  reference = seu_ds,
+  refdata = list(
+    cell_type = "cell_type"
+  ),
+  reference.reduction = "pca"
+)
+```
+
+#Setting a threshold
+```{r, eval=FALSE}
+PTCL_POST_ss <- subset(PTCL_POST, subset = predicted.cell_type.score > 0.65)
+PTCL_PRE_ss <- subset(PTCL_PRE, subset = predicted.cell_type.score > 0.65)
+
+PTCL_POST_ss <- NormalizeData(PTCL_POST_ss)
+PTCL_POST_ss <- FindVariableFeatures(PTCL_POST_ss)
+PTCL_POST_ss <- ScaleData(PTCL_POST_ss)
+PTCL_POST_ss <- RunPCA(PTCL_POST_ss)
+PTCL_POST_ss <- FindNeighbors(PTCL_POST_ss)
+PTCL_POST_ss <- FindClusters(PTCL_POST_ss)
+PTCL_POST_ss <- RunUMAP(PTCL_POST_ss, dims = 1:30, n_neighbors = 20, min_dist = 0.3)
+```
+
+# view plot?
+```{r, eval=FALSE}
+DimPlot(PTCL_POST_ss,reduction="umap",label=T,pt.size=1,group.by="predicted.cell_type")
+```
+
+```{r , eval=FALSE}
+PTCL_PRE_ss <- NormalizeData(PTCL_PRE_ss)
+PTCL_PRE_ss <- FindVariableFeatures(PTCL_PRE_ss)
+PTCL_PRE_ss <- ScaleData(PTCL_PRE_ss)
+PTCL_PRE_ss <- RunPCA(PTCL_PRE_ss)
+PTCL_PRE_ss <- FindNeighbors(PTCL_PRE_ss)
+PTCL_PRE_ss <- FindClusters(PTCL_PRE_ss)
+PTCL_PRE_ss <- RunUMAP(PTCL_PRE_ss, dims = 1:30, n_neighbors = 20, min_dist = 0.3)
+```
+
+```{r, eval=FALSE}
+DimPlot(PTCL_PRE_ss,reduction="umap",label=T,pt.size=1,group.by="predicted.cell_type")
+```
