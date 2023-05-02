@@ -21,4 +21,5 @@ devtools::install_github("moi-taiga/GeneSwitchesScorer")
 
 ## Example
 
-<https://moi-taiga.github.io/GeneSwitchesScorer/articles/GSS_Workflow.html>
+[GSS
+Workflow](https://moi-taiga.github.io/GeneSwitchesScorer/articles/GSS_Workflow.html)
