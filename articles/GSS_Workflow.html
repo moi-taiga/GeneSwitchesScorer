@@ -87,9 +87,10 @@ identify progression towards Tcell exhaustion.</p>
 </h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/moi-taiga/GeneSwitchesScorer" class="external-link">GeneSwitchesScorer</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span></span>
 <span><span class="co"># library(GeneSwitches)</span></span>
 <span><span class="co"># library(slingshot)</span></span>
-<span><span class="co"># library(Seurat)</span></span>
+<span></span>
 <span><span class="co">#</span></span>
 <span><span class="co"># library(SeuratObject)</span></span>
 <span><span class="co"># library(sp)</span></span>
@@ -125,7 +126,9 @@ It also uses <strong>###</strong> as the sample/patient data.</p>
 </h5>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#sctransforming the downsampled atlas object</span></span>
-<span><span class="va">seu_ds</span> <span class="op">&lt;-</span> <span class="fu">SCTransform</span><span class="op">(</span><span class="va">seu_ds</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#atlas.seu &lt;- SCTransform(atlas.seu, verbose = TRUE)</span></span>
+<span><span class="co">#ERROR in make_cell_attr(umi, cell_attr, latent_var, batch_var, latent_var_nonreg,  : </span></span>
+<span><span class="co">#  cell attribute row names must match column names of count matrix</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level4">
