@@ -17,11 +17,12 @@ knitr::opts_chunk$set(
 This workflow will take you through using GSS on "patient data" to identify progression towards Tcell exhaustion. 
 
 ### Necessary Packages for this Example Workflow: 
-```{r setup}
+```{r, eval=FALSE}
 library(GeneSwitchesScorer)
+library(Seurat)
 # library(GeneSwitches)
 # library(slingshot)
-# library(Seurat)
+
 #
 # library(SeuratObject)
 # library(sp)
@@ -51,9 +52,10 @@ post.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_POST.rds")
 #### *TODO: MTN - I need to understand what this does.*
 ```{r, eval=FALSE}
 #sctransforming the downsampled atlas object
-seu_ds <- SCTransform(seu_ds, verbose = FALSE)
+#atlas.seu <- SCTransform(atlas.seu, verbose = TRUE)
+#ERROR in make_cell_attr(umi, cell_attr, latent_var, batch_var, latent_var_nonreg,  : 
+#  cell attribute row names must match column names of count matrix
 ```
-
 ### Subsetting them to get more cells in each sample
 #### *TODO: MTN - I dont understand this comment.*
 ```{r, eval=FALSE}
