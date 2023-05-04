@@ -20,13 +20,13 @@ This workflow will take you through using GSS on "patient data" to identify prog
 ```{r, eval=FALSE}
 library(GeneSwitchesScorer)
 library(Seurat)
-# library(GeneSwitches)
-# library(slingshot)
+library(GeneSwitches)
+library(slingshot)
 
-#
+library(SingleCellExperiment)
 # library(SeuratObject)
 # library(sp)
-# library(RColorBrewer)
+library(RColorBrewer)
 # library(data.table)
 # library(reticulate)
 # library(patchwork)
@@ -40,98 +40,142 @@ This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Onc
 **TODO REF**:\
 https://zenodo.org/record/5205544 \
 It also uses **###** as the sample/patient data. 
+both are seurat objects.
 ```{r, eval = FALSE}
 atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
 pre.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_PRE.rds")
 post.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_POST.rds")
 ```
 
-## Data manipulation.
-
-### SCTransform 
-#### *TODO: MTN - I need to understand what this does.*
-```{r, eval=FALSE}
-#sctransforming the downsampled atlas object
-#atlas.seu <- SCTransform(atlas.seu, verbose = TRUE)
-#ERROR in make_cell_attr(umi, cell_attr, latent_var, batch_var, latent_var_nonreg,  : 
-#  cell attribute row names must match column names of count matrix
-```
-### Subsetting them to get more cells in each sample
-#### *TODO: MTN - I dont understand this comment.*
-```{r, eval=FALSE}
-pre.seu <- subset(pre.seu, subset = nFeature_RNA > 200)
-post.seu <- subset(post.seu, subset = nFeature_RNA > 200)
+### Optional: view the umaps of the input data. 
+```{r, eval = FALSE}
+DimPlot(object = pre.seu, reduction = "umap", group.by = "celltype" ,label = T)
+DimPlot(object = post.seu, reduction = "umap", group.by = "celltype" ,label = T)
+DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T)
 ```
 
-### Label transfer so consistency is maintained from atlas and patient sample dataset annotation
+## Subset the objects to only be the trajectory that we are interested in. 
+```{r, eval = FALSE}
+# subsetting the pre treatment patient data to only include the exhaustion trajectory.
+pre_T.seu <- subset(x = pre.seu, subset = celltype %in% c("Early_Tcells/CD3+CD4+TIGIT+GATA3+",
+                                                          "CD3+CD4-CD8-TIGIT+_Tcell3",
+                                                          "CD3+CD4-CD8+TIGIT+_Tcell2",
+                                                          "CD3+CD4-CD8+TIGIT+_Tcells",
+                                                          "Cytotoxic_CD8Tcell",
+                                                          "CD3+TIGIT+Tcell",
+                                                          "Tcell1"))
 
-```{r, eval=FALSE}
-post_anchors <- FindTransferAnchors(
-  reference = seu_ds,
-  query = PTCL_POST,
-  normalization.method = "SCT",
-  reference.reduction = "pca",
-  dims = 1:50
-)
+# subsetting the post treatment patient data to only include the exhaustion trajectory.
+post_T.seu <- subset(x = post.seu, subset = celltype %in% c("CD3+PDCD1+TIGIT+Activated",
+                                                            "Tcell2_CD3+GATA3+TIGIT+",
+                                                            "Tcell_CD3+GATA3+TIGIT+",
+                                                            "Cytotoxic_CD8Tcell",
+                                                            "Tcell_CD3+TIGIT+",
+                                                            "Activated_Tcell",
+                                                            "Tcell2"))
 
-PTCL_POST <- MapQuery(
-  anchorset = post_anchors,
-  query = PTCL_POST,
-  reference = seu_ds,
-  refdata = list(
-    cell_type = "cell_type"
-  ),
-  reference.reduction = "pca"
-)
-
-pre_anchors <- FindTransferAnchors(
-  reference = seu_ds,
-  query = PTCL_PRE,
-  normalization.method = "SCT",
-  reference.reduction = "pca",
-  dims = 1:50
-)
-
-PTCL_PRE <- MapQuery(
-  anchorset = pre_anchors,
-  query = PTCL_PRE,
-  reference = seu_ds,
-  refdata = list(
-    cell_type = "cell_type"
-  ),
-  reference.reduction = "pca"
-)
+# Subsetting the Atlas data into 3 types of Tcells for the exhaustion trajectory.
+atlas_exhaustion.seu <- subset(x = atlas.seu, subset = lv1_annot %in% c("T cells naive",
+                                                                        "CD8 cytotoxic", 
+                                                                        "CD8 terminally exhausted"))
 ```
 
-#Setting a threshold
-```{r, eval=FALSE}
-PTCL_POST_ss <- subset(PTCL_POST, subset = predicted.cell_type.score > 0.65)
-PTCL_PRE_ss <- subset(PTCL_PRE, subset = predicted.cell_type.score > 0.65)
-
-PTCL_POST_ss <- NormalizeData(PTCL_POST_ss)
-PTCL_POST_ss <- FindVariableFeatures(PTCL_POST_ss)
-PTCL_POST_ss <- ScaleData(PTCL_POST_ss)
-PTCL_POST_ss <- RunPCA(PTCL_POST_ss)
-PTCL_POST_ss <- FindNeighbors(PTCL_POST_ss)
-PTCL_POST_ss <- FindClusters(PTCL_POST_ss)
-PTCL_POST_ss <- RunUMAP(PTCL_POST_ss, dims = 1:30, n_neighbors = 20, min_dist = 0.3)
+### Optional: view the umaps of the subsetted data. 
+```{r, eval = FALSE}
+DimPlot(object = pre_T.seu, reduction = "umap", group.by = "celltype" ,label = T)
+DimPlot(object = post_T.seu, reduction = "umap", group.by = "celltype" ,label = T)
+DimPlot(object = atlas_exhaustion.seu, reduction = "umap", group.by = "lv1_annot" ,label = T)
 ```
 
-# view plot?
-```{r, eval=FALSE}
-DimPlot(PTCL_POST_ss,reduction="umap",label=T,pt.size=1,group.by="predicted.cell_type")
+
+## Process the atlas data using Seurat. 
+```{r, eval = FALSE}
+# Scale Data
+atlas_exhaustion.seu <- ScaleData(atlas_exhaustion.seu)
+# Run PCA
+atlas_exhaustion.seu <- RunPCA(atlas_exhaustion.seu)
+# Run UMAP
+atlas_exhaustion.seu <- RunUMAP(atlas_exhaustion.seu, dims = 1:30)
+# FindNeighbors
+atlas_exhaustion.seu <- FindNeighbors(atlas_exhaustion.seu, reduction = "pca", dims = 1:30)
+# FindClusters
+atlas_exhaustion.seu <- FindClusters(atlas_exhaustion.seu, resolution = 0.5)
 ```
 
-```{r , eval=FALSE}
-PTCL_PRE_ss <- NormalizeData(PTCL_PRE_ss)
-PTCL_PRE_ss <- FindVariableFeatures(PTCL_PRE_ss)
-PTCL_PRE_ss <- ScaleData(PTCL_PRE_ss)
-PTCL_PRE_ss <- RunPCA(PTCL_PRE_ss)
-PTCL_PRE_ss <- FindNeighbors(PTCL_PRE_ss)
-PTCL_PRE_ss <- FindClusters(PTCL_PRE_ss)
-PTCL_PRE_ss <- RunUMAP(PTCL_PRE_ss, dims = 1:30, n_neighbors = 20, min_dist = 0.3)
+## Convert the Seurat objects to SingleCellExperiment objects.
+```{r, eval = FALSE}
+# converting the pre-treatment patient data to SCE.
+pre.sce <- as.SingleCellExperiment(pre.seu)
+
+# converting the pre-treatment patient data to SCE.
+post.sce <- as.SingleCellExperiment(post.seu)
+
+# converting the atlas data to SCE.
+atlas_exhaustion.sce <- as.SingleCellExperiment(atlas_exhaustion.seu)
 ```
 
-```{r, eval=FALSE}
-DimPlot(PTCL_PRE_ss,reduction="umap",label=T,pt.size=1,group.by="predicted.cell_type")
+## Run slingshot on the atlas data
+```{r, eval = FALSE}
+atlas_exhaustion.sce  <- slingshot(atlas_exhaustion.sce, 
+                                   clusterLabels = "lv1_annot", 
+                                   start.clus  = "T cells naive", 
+                                   end.clus = "CD8 terminally exhausted", 
+                                   reducedDim = "UMAP")
+```
+
+#### Check:
+```{r, eval = FALSE}
+summary(atlas_exhaustion.sce$slingPseudotime_1)
+```
+
+
+### Plot the trajectory
+```{r, eval = FALSE}
+colors <- colorRampPalette(brewer.pal(11,'Spectral')[-6])(100)
+plotcol <- colors[cut(atlas_exhaustion.sce$slingPseudotime_1, breaks=100)]
+plot(reducedDims(atlas_exhaustion.sce)$UMAP, col = plotcol, pch=16, asp = 1)
+lines(SlingshotDataSet(atlas_exhaustion.sce), lwd=2, col='black')
+```
+
+## Convert the SingleCellExperiment objects to GeneSwitches Objects.
+```{r, eval = FALSE}
+# convert the pre treatment patient data to a GS obj. 
+gs_pre <- SingleCellExperiment(assays = List(expdata = logcounts(pre.sce)))
+# convert the post treatment patient data to a GS obj. 
+gs_post <- SingleCellExperiment(assays = List(expdata = logcounts(post.sce)))
+# convert the atlas data to a GS obj.
+gs_atlas <- SingleCellExperiment(assays = List(expdata = logcounts(atlas_exhaustion.sce)))
+colData(gs_atlas)$Pseudotime <- -atlas_exhaustion.sce$slingPseudotime_1
+reducedDims(gs_atlas) <- SimpleList(UMAP = reducedDim(atlas_exhaustion.sce, "UMAP", withDimnames=TRUE))
+```
+
+## Binarize
+When checking if the 0.2 cutoff is appropriate I found there to be negative expression... \
+```{r, eval = FALSE} hist(as.numeric(assays(gs_atlas)$expdata))``` \
+```{r, eval = FALSE}
+bn_cutoff <- 0.3
+# binarize pre treatment patient data
+#gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+# binarize post treatment patient data
+#gs_post<- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+# binarize atlas data
+gs_atlas<- binarize_exp(gs_atlas, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+```
+
+## Filter Switching Genes
+```{r, eval = FALSE}
+sg_allgenes <- filter_switchgenes(gs_atlas, allgenes = TRUE)
+sg_allgenes <- filter_switchgenes(gs_atlas, allgenes = TRUE, topnum = 15)
+```
+
+
+### Optional: view the timeline of the filtered switching genes from the Atlas.
+```{r, eval = FALSE}
+#plot_timeline_ggplot(sg_atlas, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
+```
+
+## Select evenly distributed switching genes
+remember to define the minimum time spacing
+```{r, eval = FALSE}
+gs_scorer_genes <- select_evenly_distributed_switching_genes(sg_allgenes, min_time_spacing = 5)
 ```
