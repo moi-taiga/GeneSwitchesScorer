@@ -1,14 +1,18 @@
 ---
-title: "Untitled"
-output: github_document
+title: "wholeanalysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{wholeanalysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## GitHub Documents
-
+## Load Libraries
+```{r, eval = FALSE}
 library(data.table)
 library(Matrix)
 library(reticulate)
@@ -19,22 +23,34 @@ library(RColorBrewer)
 library(parallel)
 library(GeneSwitches)
 library(slingshot)
+```
 
-#Loading in the downsampled atlas object
+### Loading in the downsampled atlas object
+```{r, eval = FALSE}
 seu_ds <- readRDS("/scratch/ojlr1u20/TICAtlas_downsampled_1000.rds")
+```
 
-#sctransforming the downsampled atlas object
+## sctransforming the downsampled atlas object
+```{r, eval = FALSE}
 seu_ds <- SCTransform(seu_ds, verbose = FALSE)
+```
 
-#loading in the individual datasets
+
+## loading in the individual datasets
+```{r, eval = FALSE}
 PTCL_POST <-  readRDS("/scratch/ojlr1u20/PTCL_POST.rds")
 PTCL_PRE <-  readRDS("/scratch/ojlr1u20/PTCL_PRE.rds")
+```
 
-#subsetting them to get more cells in each sample
+### subsetting them to get more cells in each sample
+```{r, eval = FALSE}
 PTCL_POST <- subset(PTCL_POST, subset = nFeature_RNA > 200)
 PTCL_PRE <- subset(PTCL_PRE, subset = nFeature_RNA > 200)
+```
+
 
 #Label transfer so consistency is maintained from atlas and patient sample dataset annotation
+```{r, eval = FALSE}
 post_anchors <- FindTransferAnchors(
   reference = seu_ds,
   query = PTCL_POST,
@@ -70,8 +86,11 @@ PTCL_PRE <- MapQuery(
   ),
   reference.reduction = "pca"
 )
+```
 
-#Setting a threshold
+
+## Setting a threshold
+```{r, eval = FALSE}
 PTCL_POST_ss <- subset(PTCL_POST, subset = predicted.cell_type.score > 0.65)
 PTCL_PRE_ss <- subset(PTCL_PRE, subset = predicted.cell_type.score > 0.65)
 
@@ -94,17 +113,25 @@ PTCL_PRE_ss <- FindClusters(PTCL_PRE_ss)
 PTCL_PRE_ss <- RunUMAP(PTCL_PRE_ss, dims = 1:30, n_neighbors = 20, min_dist = 0.3)
 
 DimPlot(PTCL_PRE_ss,reduction="umap",label=T,pt.size=1,group.by="predicted.cell_type")
+```
 
-#subsetting the downsampled atlas into three T cell types that fit the exhaustion trajectory
+
+### subsetting the downsampled atlas into three T cell types that fit the exhaustion trajectory
+```{r, eval = FALSE}
 seu_ds <- readRDS("/scratch/ojlr1u20/TICAtlas_downsampled_1000.rds")
 seu_pr <- subset(x = seu_ds, idents = c("Naive T cells","Cytotoxic CD8 T cells", "Terminally exhausted CD8 T cells"))
 seu_sources <- SplitObject(seu_pr, split.by = "source")
-# Then, loop through the list of Seurat objects and remove any that have less than 100 cells
+```
 
-# Create a new list to store the filtered Seurat objects
+## Then, loop through the list of Seurat objects and remove any that have less than 100 cells
+
+## Create a new list to store the filtered Seurat objects
+```{r, eval = FALSE}
 filtered_seu_sources <- list()
+```
 
 # Loop over each Seurat object in the original list
+```{r, eval = FALSE}
 for (i in 1:length(seu_sources)) {
   # Check the number of cells in the Seurat object
   num_cells <- dim(seu_sources[[i]]@assays$RNA@counts)[2] 
@@ -122,17 +149,20 @@ for (i in 1:length(filtered_seu_sources)) {
   filtered_seu_sources[[i]] = FindVariableFeatures(filtered_seu_sources[[i]], selection.method = "vst", 
                                                    nfeatures = 1500, verbose = FALSE)
 }
+```
 
-# All are default settings except anchor.features
+## All are default settings except anchor.features
+```{r, eval = FALSE}
 seuAnch = FindIntegrationAnchors(filtered_seu_sources, anchor.features = 1500, 
                                  normalization.method = "LogNormalize", 
                                  reduction = "cca", dims = 1:30,
                                  k.anchor = 5, k.filter = 200,
                                  k.score = 30, max.features = 200)
-
+```
 
 
 # Here, we integrate all genes common between snRNA and scRNA
+```{r, eval = FALSE}
 seu = IntegrateData(anchorset = seuAnch, dims = 1:30,
                     normalization.method = "LogNormalize")
 
@@ -419,4 +449,4 @@ plot(colSums(postflat))
 
 patient_diff = colSums(postflat) - colSums(preflat)
 plot(patient_diff)
-
+```
