@@ -458,166 +458,200 @@ from Atlas Data<a class="anchor" aria-label="anchor" href="#binary_counts_matrix
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#list_of_cell_position_frequencies &lt;- create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="combining-all-cells-racing-lines-after-binerization-owens-way">Combining all cells racing lines after binerization (Owen’s
+<div class="section level3">
+<h3 id="combining-all-cells-racing-lines-after-binerization-owens-way">Combining all cells racing lines after binerization (Owen’s
 way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way"></a>
-</h2>
+</h3>
+<div class="section level5">
+<h5 id="todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-">
+<em>TODO make the high-points into single points in order to makae
+the yaxis of the final plot more intuitive. </em><a class="anchor" aria-label="anchor" href="#todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
+</h5>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">flatten_cell_frequencies_owen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">location_of_highpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">all_patient_cells_scored_flat</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">location_of_highpoint</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">flat_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">flat_matrix</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-">TODO make the high-points into single points in order to makae the
-yaxis of the final plot more intuitive.<a class="anchor" aria-label="anchor" href="#todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
-</h2>
-<p>flatten_cell_frequencies_owen &lt;-
-function(list_of_cell_position_frequencies) {
-all_patient_cells_scored_flat &lt;- list() length_of_list &lt;-
-length(list_of_cell_position_frequencies) for(i in 1:length_of_list){
-location_of_highpoint &lt;-
-as.numeric(colSums(list_of_cell_position_frequencies[[i]]) ==
-max(colSums(list_of_cell_position_frequencies[[i]])))
-all_patient_cells_scored_flat[[i]] &lt;- location_of_highpoint }
-flat_matrix &lt;- do.call(rbind, all_patient_cells_scored_flat)
-return(flat_matrix) }</p>
 </div>
-<div class="section level2">
-<h2 id="combining-all-cells-racing-lines-after-binerization-owens-way-1">Combining all cells racing lines after binerization (Owen’s
+<div class="section level3">
+<h3 id="combining-all-cells-racing-lines-after-binerization-owens-way-1">Combining all cells racing lines after binerization (Owen’s
 way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way-1"></a>
-</h2>
+</h3>
+<div class="section level5">
+<h5 id="done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-">
+<em>DONE: make the high-points into single points in order to mkae
+the yaxis of the final plot more intuitive. </em><a class="anchor" aria-label="anchor" href="#done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
+</h5>
 </div>
-<div class="section level2">
-<h2 id="done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-">DONE: make the high-points into single points in order to mkae the
-yaxis of the final plot more intuitive.<a class="anchor" aria-label="anchor" href="#done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
-</h2>
+<div class="section level5">
+<h5 id="this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-">
+<em>this is an inelegant solution as it chooses the FIRST column
+index of the highpoint.</em><a class="anchor" aria-label="anchor" href="#this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-"></a>
+</h5>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">flatten_cell_frequencies_owen_done</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="va">location_of_highpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">indices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">location_of_highpoint</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
+<span>    <span class="va">location_of_highpoint</span><span class="op">[</span><span class="va">indices</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">all_patient_cells_scored_flat</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">location_of_highpoint</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="va">flat_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">flat_matrix</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-">this is an inelegant solution as it chooses the FIRST column index
-of the highpoint.<a class="anchor" aria-label="anchor" href="#this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-"></a>
-</h2>
-<p>flatten_cell_frequencies_owen_done &lt;-
-function(list_of_cell_position_frequencies) {
-all_patient_cells_scored_flat &lt;- list() length_of_list &lt;-
-length(list_of_cell_position_frequencies) for(i in 1:length_of_list){
-location_of_highpoint &lt;-
-as.numeric(colSums(list_of_cell_position_frequencies[[i]]) ==
-max(colSums(list_of_cell_position_frequencies[[i]]))) indices &lt;-
-which(location_of_highpoint == 1)[-1] location_of_highpoint[indices]
-&lt;- 0 all_patient_cells_scored_flat[[i]] &lt;- location_of_highpoint }
-flat_matrix &lt;- do.call(rbind, all_patient_cells_scored_flat)
-return(flat_matrix) }</p>
 </div>
-<div class="section level2">
-<h2 id="combining-all-cells-racing-lines-with-out-binerization-mois-way-">Combining all cells racing lines with out binerization (Moi’s
-way).<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-with-out-binerization-mois-way-"></a>
-</h2>
-<p>flatten_cell_frequencies_moi &lt;-
-function(list_of_cell_position_frequencies) { #making an empty flat
-matrix all_patient_cells_scored_flat &lt;- matrix(0, nrow = 1, ncol =
-100) # length_of_list &lt;- length(list_of_cell_position_frequencies) #
-for every cells matrix calculate the colsums and add them to the flat
-matrix for (i in 1:length_of_list) { all_patient_cells_scored_flat &lt;-
-all_patient_cells_scored_flat +
-colSums(list_of_cell_position_frequencies[[i]]) } # divide the values in
-the flat matrix by the number of cells in an attempt to make the yaxis
-more informative. # This may be the wrong approach but it shouldnt
-change the shape of the final plot all_patient_cells_scored_flat &lt;-
-all_patient_cells_scored_flat/length_of_list</p>
-<p>return(all_patient_cells_scored_flat) }</p>
-<p>gs_scorer_genes &lt;-
-select_evenly_distributed_switching_genes(sg_allgenes_umap,
-min_time_spacing = 5)</p>
-<p>plot_timeline_ggplot(gs_scorer_genes, timedata = sce_gs$Pseudotime,
-txtsize = 3)</p>
-<p>#subsetting the pre-treatment patient data to only include the
-exhaustion trajectory. pre_T.seu &lt;- subset(x = PTCL_PRE_ss, subset =
-predicted.cell_type %in% c(“Naive T cells”,“Cytotoxic CD8 T cells”,
-“Terminally exhausted CD8 T cells”)) # subsetting the post treatment
-patient data to only include the exhaustion trajectory. post_T.seu &lt;-
-subset(x = PTCL_POST_ss, subset = predicted.cell_type %in% c(“Naive T
-cells”,“Cytotoxic CD8 T cells”, “Terminally exhausted CD8 T cells”))</p>
+<div class="section level3">
+<h3 id="combining-all-cells-racing-lines-without-binerization-mois-way-">Combining all cells racing lines without binerization (Moi’s
+way).<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-without-binerization-mois-way-"></a>
+</h3>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">flatten_cell_frequencies_moi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">#making an empty flat matrix</span></span>
+<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>  <span class="co">#</span></span>
+<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
+<span>  <span class="co"># for every cells matrix calculate the colsums and add them to the flat matrix</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="va">all_patient_cells_scored_flat</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="co"># divide the values in the flat matrix by the number of cells in an attempt to make the yaxis more informative.</span></span>
+<span>  <span class="co"># This may be the wrong approach but it shouldnt change the shape of the final plot</span></span>
+<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="va">all_patient_cells_scored_flat</span><span class="op">/</span><span class="va">length_of_list</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="converting-the-pre-treatment-patient-data-to-sce-">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce-"></a>
-</h2>
-<p>pre.sce &lt;- as.SingleCellExperiment(pre_T.seu)</p>
+<div class="section level3">
+<h3 id="select_evenly_distributed_switching_genes-1">select_evenly_distributed_switching_genes<a class="anchor" aria-label="anchor" href="#select_evenly_distributed_switching_genes-1"></a>
+</h3>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_scorer_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_evenly_distributed_switching_genes.html">select_evenly_distributed_switching_genes</a></span><span class="op">(</span><span class="va">sg_allgenes_umap</span>, min_time_spacing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="converting-the-pre-treatment-patient-data-to-sce--1">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce--1"></a>
-</h2>
-<p>post.sce &lt;- as.SingleCellExperiment(post_T.seu)</p>
+<div class="section level3">
+<h3 id="plot-2">plot<a class="anchor" aria-label="anchor" href="#plot-2"></a>
+</h3>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">gs_scorer_genes</span>, timedata <span class="op">=</span> <span class="va">sce_gs</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="convert-the-pre-treatment-patient-data-to-a-gs-obj-">convert the pre treatment patient data to a GS obj.<a class="anchor" aria-label="anchor" href="#convert-the-pre-treatment-patient-data-to-a-gs-obj-"></a>
-</h2>
-<p>gs_pre &lt;- SingleCellExperiment(assays = List(expdata =
-logcounts(pre.sce))) # convert the post treatment patient data to a GS
-obj. gs_post &lt;- SingleCellExperiment(assays = List(expdata =
-logcounts(post.sce)))</p>
+<div class="section level3">
+<h3 id="subsetting-the-pre-treatment-patient-data-to-only-include-the-exhaustion-trajectory-">subsetting the pre-treatment patient data to only include the
+exhaustion trajectory.<a class="anchor" aria-label="anchor" href="#subsetting-the-pre-treatment-patient-data-to-only-include-the-exhaustion-trajectory-"></a>
+</h3>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pre_T.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PTCL_PRE_ss</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive T cells"</span>,<span class="st">"Cytotoxic CD8 T cells"</span>, <span class="st">"Terminally exhausted CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="todo-check-if-this-cutoff-is-suitable-for-the-patient-data-">TODO check if this cutoff is suitable for the patient data.<a class="anchor" aria-label="anchor" href="#todo-check-if-this-cutoff-is-suitable-for-the-patient-data-"></a>
-</h2>
-<p>bn_cutoff &lt;- 0.2 # binarize pre treatment patient data gs_pre&lt;-
-binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff) #
-binarize post treatment patient data gs_post&lt;- binarize_exp(gs_post,
-fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)</p>
-<p>binary_counts_matrix_pre&lt;-assays(gs_pre)$binary</p>
+<div class="section level3">
+<h3 id="subsetting-the-post-treatment-patient-data-to-only-include-the-exhaustion-trajectory-">subsetting the post treatment patient data to only include the
+exhaustion trajectory.<a class="anchor" aria-label="anchor" href="#subsetting-the-post-treatment-patient-data-to-only-include-the-exhaustion-trajectory-"></a>
+</h3>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">post_T.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PTCL_POST_ss</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive T cells"</span>,<span class="st">"Cytotoxic CD8 T cells"</span>, <span class="st">"Terminally exhausted CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="converting-the-pre-treatment-patient-data-to-sce-">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce-"></a>
+</h3>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pre.sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">pre_T.seu</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="converting-the-pre-treatment-patient-data-to-sce--1">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce--1"></a>
+</h3>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">post.sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">post_T.seu</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="convert-the-pre-treatment-patient-data-to-a-gs-obj-">convert the pre treatment patient data to a GS obj.<a class="anchor" aria-label="anchor" href="#convert-the-pre-treatment-patient-data-to-a-gs-obj-"></a>
+</h3>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_pre</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">pre.sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="convert-the-post-treatment-patient-data-to-a-gs-obj-">convert the post treatment patient data to a GS obj.<a class="anchor" aria-label="anchor" href="#convert-the-post-treatment-patient-data-to-a-gs-obj-"></a>
+</h3>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_post</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">post.sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="todo-check-if-this-cutoff-is-suitable-for-the-patient-data-">TODO check if this cutoff is suitable for the patient data.<a class="anchor" aria-label="anchor" href="#todo-check-if-this-cutoff-is-suitable-for-the-patient-data-"></a>
+</h3>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
+<span><span class="co"># binarize pre treatment patient data</span></span>
+<span><span class="va">gs_pre</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_pre</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
+<span><span class="co"># binarize post treatment patient data</span></span>
+<span><span class="va">gs_post</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_post</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">binary_counts_matrix_pre</span><span class="op">&lt;-</span><span class="fu">assays</span><span class="op">(</span><span class="va">gs_pre</span><span class="op">)</span><span class="op">$</span><span class="va">binary</span></span></code></pre></div>
 <p>#create a reduced binary expression matrix for only the switching
-genes, binary counts is from the patient and gs scorer is from atlas
-filtered_return_pre&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix_pre,
-gs_scorer_genes)</p>
+genes, binary counts is from the patient and gs scorer is from atlas</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filtered_return_pre</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/filter_gene_expression_for_switching_genes.html">filter_gene_expression_for_switching_genes</a></span><span class="op">(</span><span class="va">binary_counts_matrix_pre</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="mtn---im-not-sure-what-this-does">MTN - I’m not sure what this does<a class="anchor" aria-label="anchor" href="#mtn---im-not-sure-what-this-does"></a>
 </h2>
-<p>reduced_binary_counts_matrix_pre&lt;-filtered_return_pre[[1]]</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reduced_binary_counts_matrix_pre</span><span class="op">&lt;-</span><span class="va">filtered_return_pre</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="mtn---or-this-">MTN - or this.<a class="anchor" aria-label="anchor" href="#mtn---or-this-"></a>
 </h2>
-<p>gs_scorer_genes&lt;-filtered_return_pre[[2]]</p>
-<p>#Create list_of_cell_position_frequencies using valid indices
-list_of_cell_position_frequencies &lt;-
-create_racing_lines(reduced_binary_counts_matrix_pre,
-gs_scorer_genes)</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_scorer_genes</span><span class="op">&lt;-</span><span class="va">filtered_return_pre</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p>#Create list_of_cell_position_frequencies using valid indices</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">list_of_cell_position_frequencies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_racing_lines.html">create_racing_lines</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix_pre</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="combining-all-cells-racing-lines-after-binerization-owens-way-2">Combining all cells racing lines after binerization (Owen’s
 way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way-2"></a>
 </h2>
-<p>preflat &lt;-
-flatten_cell_frequencies_moi(list_of_cell_position_frequencies)
-plot(colSums(preflat))</p>
-<p>binary_counts_matrix_post&lt;-assays(gs_post)$binary</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">preflat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_cell_frequencies_moi.html">flatten_cell_frequencies_moi</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">preflat</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">binary_counts_matrix_post</span><span class="op">&lt;-</span><span class="fu">assays</span><span class="op">(</span><span class="va">gs_post</span><span class="op">)</span><span class="op">$</span><span class="va">binary</span></span></code></pre></div>
 <p>#create a reduced binary expression matrix for only the switching
-genes, binary counts is from the patient and gs scorer is from atlas
-filtered_return_post&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix_post,
-gs_scorer_genes)</p>
+genes, binary counts is from the patient and gs scorer is from atlas</p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filtered_return_post</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/filter_gene_expression_for_switching_genes.html">filter_gene_expression_for_switching_genes</a></span><span class="op">(</span><span class="va">binary_counts_matrix_post</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="mtn---im-not-sure-what-this-does-1">MTN - I’m not sure what this does<a class="anchor" aria-label="anchor" href="#mtn---im-not-sure-what-this-does-1"></a>
 </h2>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reduced_binary_counts_matrix_post</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="mtn---or-this--1">MTN - or this.<a class="anchor" aria-label="anchor" href="#mtn---or-this--1"></a>
 </h2>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_scorer_genes</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p>#Create list_of_cell_position_frequencies using valid indices</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">list_of_cell_position_frequencies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_racing_lines.html">create_racing_lines</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix_post</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="combining-all-cells-racing-lines-after-binerization-and-plot">Combining all cells racing lines after binerization and plot<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-and-plot"></a>
 </h2>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">postflat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_cell_frequencies_moi.html">flatten_cell_frequencies_moi</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="view-the-differnece-between-patients">view the differnece between patients<a class="anchor" aria-label="anchor" href="#view-the-differnece-between-patients"></a>
 </h3>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">patient_diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">preflat</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">patient_diff</span><span class="op">)</span></span></code></pre></div>
 </div>
