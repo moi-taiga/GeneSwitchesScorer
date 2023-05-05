@@ -155,23 +155,28 @@ When checking if the 0.2 cutoff is appropriate I found there to be negative expr
 ```{r, eval = FALSE}
 bn_cutoff <- 0.3
 # binarize pre treatment patient data
-#gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize post treatment patient data
-#gs_post<- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+gs_post<- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize atlas data
-gs_atlas<- binarize_exp(gs_atlas, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+gs_atlas_binerized <- binarize_exp(gs_atlas, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+```
+
+## fit logistic regression and find the switching pseudo-time point for each gene
+```{r, eval = FALSE}
+gs_atlas_glm <- find_switch_logistic_fastglm(gs_atlas_binerized, downsample = FALSE, show_warning = FALSE)
 ```
 
 ## Filter Switching Genes
+### *currently using the default cutoff of 0.03 which gives 29 genes. 
 ```{r, eval = FALSE}
-sg_allgenes <- filter_switchgenes(gs_atlas, allgenes = TRUE)
-sg_allgenes <- filter_switchgenes(gs_atlas, allgenes = TRUE, topnum = 15)
+gs_atlas_r203 <- filter_switchgenes(gs_atlas_glm, allgenes = TRUE,r2cutoff = 0.03)
 ```
 
 
 ### Optional: view the timeline of the filtered switching genes from the Atlas.
 ```{r, eval = FALSE}
-#plot_timeline_ggplot(sg_atlas, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
+plot_timeline_ggplot(gs_atlas_r203, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
 ```
 
 ## Select evenly distributed switching genes
