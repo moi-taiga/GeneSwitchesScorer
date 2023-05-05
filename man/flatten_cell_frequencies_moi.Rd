@@ -7,7 +7,7 @@
 flatten_cell_frequencies_moi(list_of_cell_position_frequencies)
 }
 \arguments{
-\item{list_of_cell_position_frequencies}{}
+\item{list_of_cell_position_frequencies}{list_of_cell_position_frequencies produced by racing line builder.}
 }
 \value{
 A flat matrix where each column represents a position along a trajectory,

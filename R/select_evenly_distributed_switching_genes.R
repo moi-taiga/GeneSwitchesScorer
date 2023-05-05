@@ -10,6 +10,13 @@
 #' @export
 select_evenly_distributed_switching_genes <- function(sg_allgenes, min_time_spacing){
 
+  ## Checks
+  # Make sure there is a minimum of 1 gene switched on (up)
+  stopifnot("No genes switching \"up\" " = !sum(sg_allgenes$direction == "up") < 1)
+  # Make sure there is a minimum of 1 gene switched off (down)
+  stopifnot("No genes switching \"down\" " = !sum(sg_allgenes$direction == "down") < 1)
+
+
   ## Sort sg_allgenes by pseudoR2s
   sg_allgenes <- sg_allgenes[order(-sg_allgenes$pseudoR2s),]
 
