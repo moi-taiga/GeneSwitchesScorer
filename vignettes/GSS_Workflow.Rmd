@@ -168,19 +168,22 @@ gs_atlas_glm <- find_switch_logistic_fastglm(gs_atlas_binerized, downsample = FA
 ```
 
 ## Filter Switching Genes
-### *currently using the default cutoff of 0.03 which gives 29 genes. 
+### ~*currently using the default cutoff of 0.03 which gives 29 genes.*~
+### ~*currently using a cutoff of 0.01 which gives 108 genes.*~
+### *currently using a cutoff of 0.005 which gives 148 genes.*
 ```{r, eval = FALSE}
-gs_atlas_r203 <- filter_switchgenes(gs_atlas_glm, allgenes = TRUE,r2cutoff = 0.03)
+gs_atlas_r2005 <- filter_switchgenes(gs_atlas_glm, allgenes = TRUE,r2cutoff = 0.005)
 ```
 
 
 ### Optional: view the timeline of the filtered switching genes from the Atlas.
+### *Seems a bit odd, maybe it is to do with using logged expression data*
 ```{r, eval = FALSE}
-plot_timeline_ggplot(gs_atlas_r203, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
+plot_timeline_ggplot(gs_atlas_r2005, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
 ```
 
 ## Select evenly distributed switching genes
 remember to define the minimum time spacing
 ```{r, eval = FALSE}
-gs_scorer_genes <- select_evenly_distributed_switching_genes(sg_allgenes, min_time_spacing = 5)
+gs_scorer_genes <- select_evenly_distributed_switching_genes(gs_atlas_r2005, min_time_spacing = 5)
 ```
