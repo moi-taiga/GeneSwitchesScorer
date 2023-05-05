@@ -235,10 +235,9 @@ have less than 100 cells<a class="anchor" aria-label="anchor" href="#then-loop-t
 <span>                                 k.anchor <span class="op">=</span> <span class="fl">5</span>, k.filter <span class="op">=</span> <span class="fl">200</span>,</span>
 <span>                                 k.score <span class="op">=</span> <span class="fl">30</span>, max.features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level2">
-<h2 id="here-we-integrate-all-genes-common-between-snrna-and-scrna">Here, we integrate all genes common between snRNA and scRNA<a class="anchor" aria-label="anchor" href="#here-we-integrate-all-genes-common-between-snrna-and-scrna"></a>
-</h2>
+<div class="section level3">
+<h3 id="here-we-integrate-all-genes-common-between-snrna-and-scrna">Here, we integrate all genes common between snRNA and scRNA<a class="anchor" aria-label="anchor" href="#here-we-integrate-all-genes-common-between-snrna-and-scrna"></a>
+</h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seu</span> <span class="op">=</span> <span class="fu">IntegrateData</span><span class="op">(</span>anchorset <span class="op">=</span> <span class="va">seuAnch</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,</span>
 <span>                    normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span><span class="op">)</span></span>
@@ -253,52 +252,80 @@ have less than 100 cells<a class="anchor" aria-label="anchor" href="#then-loop-t
 <span></span>
 <span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"cell_type"</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span>
-<span></span>
-<span><span class="co">#switch to SCE</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">seu</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span></span>
-<span><span class="co">######UMAP#############</span></span>
-<span><span class="co">#run slingshot</span></span>
-<span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="op">(</span><span class="va">sce</span>, clusterLabels <span class="op">=</span> <span class="st">"cell_type"</span>, reducedDim <span class="op">=</span> <span class="st">'UMAP'</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#check it looks ok</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grDevices</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="switch-to-sce">switch to SCE<a class="anchor" aria-label="anchor" href="#switch-to-sce"></a>
+</h4>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">seu</span><span class="op">)</span></span></code></pre></div>
+<p>#UMAP ## run slingshot</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sce</span> <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="op">(</span><span class="va">sce</span>, clusterLabels <span class="op">=</span> <span class="st">"cell_type"</span>, reducedDim <span class="op">=</span> <span class="st">'UMAP'</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="check-it-looks-ok">check it looks ok<a class="anchor" aria-label="anchor" href="#check-it-looks-ok"></a>
+</h3>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="plot">plot<a class="anchor" aria-label="anchor" href="#plot"></a>
+</h3>
+<div class="section level5">
+<h5 id="mtn---not-sure-if-we-need-grdevices">
+<em>MTN - not sure if we need grDevices</em><a class="anchor" aria-label="anchor" href="#mtn---not-sure-if-we-need-grdevices"></a>
+</h5>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grDevices</span><span class="op">)</span></span>
 <span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu">brewer.pal</span><span class="op">(</span><span class="fl">11</span>,<span class="st">'Spectral'</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">plotcol</span> <span class="op">&lt;-</span> <span class="va">colors</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span>, breaks<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">reducedDims</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">$</span><span class="va">UMAP</span>, col <span class="op">=</span> <span class="va">plotcol</span>, pch<span class="op">=</span><span class="fl">16</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu">SlingshotDataSet</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>, lwd<span class="op">=</span><span class="fl">2</span>, col<span class="op">=</span><span class="st">'black'</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#create GS object</span></span>
-<span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">logcounts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="fu">SlingshotDataSet</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span>, lwd<span class="op">=</span><span class="fl">2</span>, col<span class="op">=</span><span class="st">'black'</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="create-gs-object">create GS object<a class="anchor" aria-label="anchor" href="#create-gs-object"></a>
+</h3>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu">logcounts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
 <span><span class="fu">assay</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"counts"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">counts</span></span>
 <span></span>
 <span><span class="va">sce_gs</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">colData</span><span class="op">(</span><span class="va">sce_gs</span><span class="op">)</span><span class="op">$</span><span class="va">Pseudotime</span> <span class="op">&lt;-</span> <span class="op">-</span><span class="va">sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span></span>
-<span><span class="fu">reducedDims</span><span class="op">(</span><span class="va">sce_gs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">SimpleList</span><span class="op">(</span>UMAP <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"UMAP"</span>, withDimnames<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
+<span><span class="fu">reducedDims</span><span class="op">(</span><span class="va">sce_gs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">SimpleList</span><span class="op">(</span>UMAP <span class="op">=</span> <span class="fu">reducedDim</span><span class="op">(</span><span class="va">sce</span>, <span class="st">"UMAP"</span>, withDimnames<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="binarize">Binarize<a class="anchor" aria-label="anchor" href="#binarize"></a>
+</h3>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">1.5</span></span>
 <span><span class="va">sce_gs</span> <span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">sce_gs</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
-<span><span class="va">sce_gs</span> <span class="op">&lt;-</span> <span class="fu">find_switch_logistic_fastglm</span><span class="op">(</span><span class="va">sce_gs</span>, downsample <span class="op">=</span> <span class="cn">TRUE</span>, show_warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## filter top 15 best fitting switching genes among all the genes</span></span>
-<span><span class="va">sg_allgenes_umap</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">sce_gs</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>, topnum <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="co">## filter top 15 best fitting switching genes among surface proteins and TFs only</span></span>
-<span></span>
-<span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">sg_allgenes_umap</span>, timedata <span class="op">=</span> <span class="va">sce_gs</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="co">## Select an evenly distributed selection of genes from a GeneSwitches Object.</span></span>
-<span><span class="co"># select_evenly_distributed_switching_genes</span></span>
-<span><span class="va">select_evenly_distributed_switching_genes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sg_allgenes</span>, <span class="va">min_time_spacing</span><span class="op">)</span><span class="op">{</span></span>
+<span><span class="va">sce_gs</span> <span class="op">&lt;-</span> <span class="fu">find_switch_logistic_fastglm</span><span class="op">(</span><span class="va">sce_gs</span>, downsample <span class="op">=</span> <span class="cn">TRUE</span>, show_warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="filter-top-15-best-fitting-switching-genes-among-all-the-genes">filter top 15 best fitting switching genes among all the genes<a class="anchor" aria-label="anchor" href="#filter-top-15-best-fitting-switching-genes-among-all-the-genes"></a>
+</h3>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sg_allgenes_umap</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">sce_gs</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>, topnum <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="plot-1">plot<a class="anchor" aria-label="anchor" href="#plot-1"></a>
+</h3>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">sg_allgenes_umap</span>, timedata <span class="op">=</span> <span class="va">sce_gs</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="select-an-evenly-distributed-selection-of-genes-from-a-geneswitches-object-">Select an evenly distributed selection of genes from a GeneSwitches
+Object.<a class="anchor" aria-label="anchor" href="#select-an-evenly-distributed-selection-of-genes-from-a-geneswitches-object-"></a>
+</h3>
+</div>
+</div>
+<div class="section level2">
+<h2 id="select_evenly_distributed_switching_genes">select_evenly_distributed_switching_genes<a class="anchor" aria-label="anchor" href="#select_evenly_distributed_switching_genes"></a>
+</h2>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">select_evenly_distributed_switching_genes</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">sg_allgenes</span>, <span class="va">min_time_spacing</span><span class="op">)</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co">## Sort sg_allgenes by pseudoR2s </span></span>
 <span>  <span class="va">sg_allgenes</span> <span class="op">&lt;-</span> <span class="va">sg_allgenes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="op">-</span><span class="va">sg_allgenes</span><span class="op">$</span><span class="va">pseudoR2s</span><span class="op">)</span>,<span class="op">]</span></span>
@@ -338,11 +365,19 @@ have less than 100 cells<a class="anchor" aria-label="anchor" href="#then-loop-t
 <span>  <span class="co"># return the subsetted matrix</span></span>
 <span>  <span class="va">gs_scorer_genes</span> <span class="op">&lt;-</span> <span class="va">subsetted_matrix</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">gs_scorer_genes</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Create a reduced binary expression matrix for only the selected switching genes, </span></span>
-<span><span class="co"># binary_counts_matrix is from the Patient DATA and gs_scorer_genes is from Atlas Data</span></span>
-<span><span class="va">filter_gene_expression_for_switching_genes</span><span class="op">&lt;-</span><span class="kw">function</span><span class="op">(</span><span class="va">binary_counts_matrix</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="create-a-reduced-binary-expression-matrix-for-only-the-selected-switching-genes">Create a reduced binary expression matrix for only the selected
+switching genes,<a class="anchor" aria-label="anchor" href="#create-a-reduced-binary-expression-matrix-for-only-the-selected-switching-genes"></a>
+</h2>
+</div>
+<div class="section level2">
+<h2 id="binary_counts_matrix-is-from-the-patient-data-and-gs_scorer_genes-is-from-atlas-data">binary_counts_matrix is from the Patient DATA and gs_scorer_genes is
+from Atlas Data<a class="anchor" aria-label="anchor" href="#binary_counts_matrix-is-from-the-patient-data-and-gs_scorer_genes-is-from-atlas-data"></a>
+</h2>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">filter_gene_expression_for_switching_genes</span><span class="op">&lt;-</span><span class="kw">function</span><span class="op">(</span><span class="va">binary_counts_matrix</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">indices_of_switching_genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">binary_counts_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gs_scorer_genes</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
 <span>  <span class="va">reduced_binary_counts_matrix</span><span class="op">&lt;-</span> <span class="va">binary_counts_matrix</span><span class="op">[</span><span class="va">indices_of_switching_genes</span>,<span class="op">]</span></span>
 <span>  <span class="va">gs_scorer_genes_to_keep</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">gs_scorer_genes</span><span class="op">[</span>,<span class="fl">1</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix</span><span class="op">)</span><span class="op">)</span></span>
@@ -350,18 +385,23 @@ have less than 100 cells<a class="anchor" aria-label="anchor" href="#then-loop-t
 <span>  <span class="co">#print(gs_scorer_genes_to_keep)</span></span>
 <span>  <span class="va">returnlist</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">returnlist</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#filtered_return&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix, gs_scorer_genes)</span></span>
-<span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="section level5">
+<h5 id="old">Old?<a class="anchor" aria-label="anchor" href="#old"></a>
+</h5>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#filtered_return&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix, gs_scorer_genes)</span></span>
 <span><span class="co">#reduced_binary_counts_matrix&lt;-filtered_return[[1]]</span></span>
-<span></span>
-<span><span class="co">#gs_scorer_genes&lt;-filtered_return[[2]]</span></span>
-<span></span>
-<span></span>
-<span><span class="co"># Identify the "racing lines" </span></span>
-<span><span class="co"># TODO make this ^^ comment more verbose.</span></span>
-<span><span class="va">create_racing_lines</span><span class="op">&lt;-</span><span class="kw">function</span><span class="op">(</span><span class="va">reduced_binary_counts_matrix</span>,<span class="va">gs_scorer_genes</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="co">#gs_scorer_genes&lt;-filtered_return[[2]]</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="identify-the-racing-lines">Identify the “racing lines”<a class="anchor" aria-label="anchor" href="#identify-the-racing-lines"></a>
+</h3>
+<div class="section level4">
+<h4 id="todo-make-this-comment-more-verbose-">TODO make this ^^ comment more verbose.<a class="anchor" aria-label="anchor" href="#todo-make-this-comment-more-verbose-"></a>
+</h4>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">create_racing_lines</span><span class="op">&lt;-</span><span class="kw">function</span><span class="op">(</span><span class="va">reduced_binary_counts_matrix</span>,<span class="va">gs_scorer_genes</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">all_patients_cells_scored</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>  <span class="va">number_of_cells</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span>  <span class="va">number_of_switching_genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">gs_scorer_genes</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -405,127 +445,182 @@ have less than 100 cells<a class="anchor" aria-label="anchor" href="#then-loop-t
 <span>    <span class="va">all_patients_cells_scored</span><span class="op">[[</span><span class="va">c</span><span class="op">]</span><span class="op">]</span><span class="op">&lt;-</span><span class="va">racing_mat</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">all_patients_cells_scored</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Create list_of_cell_position_frequencies using valid indices</span></span>
-<span><span class="co"># Does this need to be included in a function?</span></span>
-<span><span class="co">#list_of_cell_position_frequencies &lt;- create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)</span></span>
-<span></span>
-<span><span class="co"># Combining all cells racing lines after binerization (Owen's way)</span></span>
-<span><span class="co"># TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive. </span></span>
-<span><span class="va">flatten_cell_frequencies_owen</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
-<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="va">location_of_highpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">all_patient_cells_scored_flat</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">location_of_highpoint</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">flat_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">flat_matrix</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Combining all cells racing lines after binerization (Owen's way)</span></span>
-<span><span class="co"># DONE: make the high-points into single points in order to mkae the yaxis of the final plot more intuitive. </span></span>
-<span><span class="co"># this is an inelegant solution as it chooses the FIRST column index of the highpoint.</span></span>
-<span><span class="va">flatten_cell_frequencies_owen_done</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
-<span>  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="va">location_of_highpoint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">indices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">location_of_highpoint</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
-<span>    <span class="va">location_of_highpoint</span><span class="op">[</span><span class="va">indices</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
-<span>    <span class="va">all_patient_cells_scored_flat</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">location_of_highpoint</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="va">flat_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">flat_matrix</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Combining all cells racing lines with out binerization (Moi's way). </span></span>
-<span><span class="va">flatten_cell_frequencies_moi</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="co">#making an empty flat matrix</span></span>
-<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span>, nrow <span class="op">=</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span>  <span class="co">#</span></span>
-<span>  <span class="va">length_of_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
-<span>  <span class="co"># for every cells matrix calculate the colsums and add them to the flat matrix</span></span>
-<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">length_of_list</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="va">all_patient_cells_scored_flat</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span>  <span class="co"># divide the values in the flat matrix by the number of cells in an attempt to make the yaxis more informative.</span></span>
-<span>  <span class="co"># This may be the wrong approach but it shouldnt change the shape of the final plot</span></span>
-<span>  <span class="va">all_patient_cells_scored_flat</span> <span class="op">&lt;-</span> <span class="va">all_patient_cells_scored_flat</span><span class="op">/</span><span class="va">length_of_list</span></span>
-<span>  </span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">all_patient_cells_scored_flat</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span></span>
-<span><span class="va">gs_scorer_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_evenly_distributed_switching_genes.html">select_evenly_distributed_switching_genes</a></span><span class="op">(</span><span class="va">sg_allgenes_umap</span>, min_time_spacing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">gs_scorer_genes</span>, timedata <span class="op">=</span> <span class="va">sce_gs</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#subsetting the pre-treatment patient data to only include the exhaustion trajectory.</span></span>
-<span><span class="va">pre_T.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PTCL_PRE_ss</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive T cells"</span>,<span class="st">"Cytotoxic CD8 T cells"</span>, <span class="st">"Terminally exhausted CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># subsetting the post treatment patient data to only include the exhaustion trajectory.</span></span>
-<span><span class="va">post_T.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PTCL_POST_ss</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Naive T cells"</span>,<span class="st">"Cytotoxic CD8 T cells"</span>, <span class="st">"Terminally exhausted CD8 T cells"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># converting the pre-treatment patient data to SCE.</span></span>
-<span><span class="va">pre.sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">pre_T.seu</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># converting the pre-treatment patient data to SCE.</span></span>
-<span><span class="va">post.sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">post_T.seu</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># convert the pre treatment patient data to a GS obj. </span></span>
-<span><span class="va">gs_pre</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">pre.sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># convert the post treatment patient data to a GS obj. </span></span>
-<span><span class="va">gs_post</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">post.sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># TODO check if this cutoff is suitable for the patient data. </span></span>
-<span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">0.2</span></span>
-<span><span class="co"># binarize pre treatment patient data</span></span>
-<span><span class="va">gs_pre</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_pre</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
-<span><span class="co"># binarize post treatment patient data</span></span>
-<span><span class="va">gs_post</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_post</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">binary_counts_matrix_pre</span><span class="op">&lt;-</span><span class="fu">assays</span><span class="op">(</span><span class="va">gs_pre</span><span class="op">)</span><span class="op">$</span><span class="va">binary</span></span>
-<span></span>
-<span><span class="co">#create a reduced binary expression matrix for only the switching genes, binary counts is from the patient and gs scorer is from atlas</span></span>
-<span><span class="va">filtered_return_pre</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/filter_gene_expression_for_switching_genes.html">filter_gene_expression_for_switching_genes</a></span><span class="op">(</span><span class="va">binary_counts_matrix_pre</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># MTN - I'm not sure what this does</span></span>
-<span><span class="va">reduced_binary_counts_matrix_pre</span><span class="op">&lt;-</span><span class="va">filtered_return_pre</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co"># MTN - or this.</span></span>
-<span><span class="va">gs_scorer_genes</span><span class="op">&lt;-</span><span class="va">filtered_return_pre</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span></span>
-<span><span class="co">#Create list_of_cell_position_frequencies using valid indices</span></span>
-<span><span class="va">list_of_cell_position_frequencies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_racing_lines.html">create_racing_lines</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix_pre</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Combining all cells racing lines after binerization (Owen's way)</span></span>
-<span><span class="va">preflat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_cell_frequencies_moi.html">flatten_cell_frequencies_moi</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">preflat</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">binary_counts_matrix_post</span><span class="op">&lt;-</span><span class="fu">assays</span><span class="op">(</span><span class="va">gs_post</span><span class="op">)</span><span class="op">$</span><span class="va">binary</span></span>
-<span></span>
-<span><span class="co">#create a reduced binary expression matrix for only the switching genes, binary counts is from the patient and gs scorer is from atlas</span></span>
-<span><span class="va">filtered_return_post</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/filter_gene_expression_for_switching_genes.html">filter_gene_expression_for_switching_genes</a></span><span class="op">(</span><span class="va">binary_counts_matrix_post</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># MTN - I'm not sure what this does</span></span>
-<span><span class="va">reduced_binary_counts_matrix_post</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co"># MTN - or this.</span></span>
-<span><span class="va">gs_scorer_genes</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span>
-<span></span>
-<span></span>
-<span><span class="co">#Create list_of_cell_position_frequencies using valid indices</span></span>
-<span><span class="va">list_of_cell_position_frequencies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_racing_lines.html">create_racing_lines</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix_post</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Combining all cells racing lines after binerization (Owen's way)</span></span>
-<span><span class="va">postflat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_cell_frequencies_moi.html">flatten_cell_frequencies_moi</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">patient_diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">preflat</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="create-list_of_cell_position_frequencies-using-valid-indices">Create list_of_cell_position_frequencies using valid indices<a class="anchor" aria-label="anchor" href="#create-list_of_cell_position_frequencies-using-valid-indices"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="does-this-need-to-be-included-in-a-function">Does this need to be included in a function?<a class="anchor" aria-label="anchor" href="#does-this-need-to-be-included-in-a-function"></a>
+</h3>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#list_of_cell_position_frequencies &lt;- create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="combining-all-cells-racing-lines-after-binerization-owens-way">Combining all cells racing lines after binerization (Owen’s
+way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way"></a>
+</h2>
+</div>
+<div class="section level2">
+<h2 id="todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-">TODO make the high-points into single points in order to makae the
+yaxis of the final plot more intuitive.<a class="anchor" aria-label="anchor" href="#todo-make-the-high-points-into-single-points-in-order-to-makae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
+</h2>
+<p>flatten_cell_frequencies_owen &lt;-
+function(list_of_cell_position_frequencies) {
+all_patient_cells_scored_flat &lt;- list() length_of_list &lt;-
+length(list_of_cell_position_frequencies) for(i in 1:length_of_list){
+location_of_highpoint &lt;-
+as.numeric(colSums(list_of_cell_position_frequencies[[i]]) ==
+max(colSums(list_of_cell_position_frequencies[[i]])))
+all_patient_cells_scored_flat[[i]] &lt;- location_of_highpoint }
+flat_matrix &lt;- do.call(rbind, all_patient_cells_scored_flat)
+return(flat_matrix) }</p>
+</div>
+<div class="section level2">
+<h2 id="combining-all-cells-racing-lines-after-binerization-owens-way-1">Combining all cells racing lines after binerization (Owen’s
+way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way-1"></a>
+</h2>
+</div>
+<div class="section level2">
+<h2 id="done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-">DONE: make the high-points into single points in order to mkae the
+yaxis of the final plot more intuitive.<a class="anchor" aria-label="anchor" href="#done-make-the-high-points-into-single-points-in-order-to-mkae-the-yaxis-of-the-final-plot-more-intuitive-"></a>
+</h2>
+</div>
+<div class="section level2">
+<h2 id="this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-">this is an inelegant solution as it chooses the FIRST column index
+of the highpoint.<a class="anchor" aria-label="anchor" href="#this-is-an-inelegant-solution-as-it-chooses-the-first-column-index-of-the-highpoint-"></a>
+</h2>
+<p>flatten_cell_frequencies_owen_done &lt;-
+function(list_of_cell_position_frequencies) {
+all_patient_cells_scored_flat &lt;- list() length_of_list &lt;-
+length(list_of_cell_position_frequencies) for(i in 1:length_of_list){
+location_of_highpoint &lt;-
+as.numeric(colSums(list_of_cell_position_frequencies[[i]]) ==
+max(colSums(list_of_cell_position_frequencies[[i]]))) indices &lt;-
+which(location_of_highpoint == 1)[-1] location_of_highpoint[indices]
+&lt;- 0 all_patient_cells_scored_flat[[i]] &lt;- location_of_highpoint }
+flat_matrix &lt;- do.call(rbind, all_patient_cells_scored_flat)
+return(flat_matrix) }</p>
+</div>
+<div class="section level2">
+<h2 id="combining-all-cells-racing-lines-with-out-binerization-mois-way-">Combining all cells racing lines with out binerization (Moi’s
+way).<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-with-out-binerization-mois-way-"></a>
+</h2>
+<p>flatten_cell_frequencies_moi &lt;-
+function(list_of_cell_position_frequencies) { #making an empty flat
+matrix all_patient_cells_scored_flat &lt;- matrix(0, nrow = 1, ncol =
+100) # length_of_list &lt;- length(list_of_cell_position_frequencies) #
+for every cells matrix calculate the colsums and add them to the flat
+matrix for (i in 1:length_of_list) { all_patient_cells_scored_flat &lt;-
+all_patient_cells_scored_flat +
+colSums(list_of_cell_position_frequencies[[i]]) } # divide the values in
+the flat matrix by the number of cells in an attempt to make the yaxis
+more informative. # This may be the wrong approach but it shouldnt
+change the shape of the final plot all_patient_cells_scored_flat &lt;-
+all_patient_cells_scored_flat/length_of_list</p>
+<p>return(all_patient_cells_scored_flat) }</p>
+<p>gs_scorer_genes &lt;-
+select_evenly_distributed_switching_genes(sg_allgenes_umap,
+min_time_spacing = 5)</p>
+<p>plot_timeline_ggplot(gs_scorer_genes, timedata = sce_gs$Pseudotime,
+txtsize = 3)</p>
+<p>#subsetting the pre-treatment patient data to only include the
+exhaustion trajectory. pre_T.seu &lt;- subset(x = PTCL_PRE_ss, subset =
+predicted.cell_type %in% c(“Naive T cells”,“Cytotoxic CD8 T cells”,
+“Terminally exhausted CD8 T cells”)) # subsetting the post treatment
+patient data to only include the exhaustion trajectory. post_T.seu &lt;-
+subset(x = PTCL_POST_ss, subset = predicted.cell_type %in% c(“Naive T
+cells”,“Cytotoxic CD8 T cells”, “Terminally exhausted CD8 T cells”))</p>
+</div>
+<div class="section level2">
+<h2 id="converting-the-pre-treatment-patient-data-to-sce-">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce-"></a>
+</h2>
+<p>pre.sce &lt;- as.SingleCellExperiment(pre_T.seu)</p>
+</div>
+<div class="section level2">
+<h2 id="converting-the-pre-treatment-patient-data-to-sce--1">converting the pre-treatment patient data to SCE.<a class="anchor" aria-label="anchor" href="#converting-the-pre-treatment-patient-data-to-sce--1"></a>
+</h2>
+<p>post.sce &lt;- as.SingleCellExperiment(post_T.seu)</p>
+</div>
+<div class="section level2">
+<h2 id="convert-the-pre-treatment-patient-data-to-a-gs-obj-">convert the pre treatment patient data to a GS obj.<a class="anchor" aria-label="anchor" href="#convert-the-pre-treatment-patient-data-to-a-gs-obj-"></a>
+</h2>
+<p>gs_pre &lt;- SingleCellExperiment(assays = List(expdata =
+logcounts(pre.sce))) # convert the post treatment patient data to a GS
+obj. gs_post &lt;- SingleCellExperiment(assays = List(expdata =
+logcounts(post.sce)))</p>
+</div>
+<div class="section level2">
+<h2 id="todo-check-if-this-cutoff-is-suitable-for-the-patient-data-">TODO check if this cutoff is suitable for the patient data.<a class="anchor" aria-label="anchor" href="#todo-check-if-this-cutoff-is-suitable-for-the-patient-data-"></a>
+</h2>
+<p>bn_cutoff &lt;- 0.2 # binarize pre treatment patient data gs_pre&lt;-
+binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff) #
+binarize post treatment patient data gs_post&lt;- binarize_exp(gs_post,
+fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)</p>
+<p>binary_counts_matrix_pre&lt;-assays(gs_pre)$binary</p>
+<p>#create a reduced binary expression matrix for only the switching
+genes, binary counts is from the patient and gs scorer is from atlas
+filtered_return_pre&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix_pre,
+gs_scorer_genes)</p>
+</div>
+<div class="section level2">
+<h2 id="mtn---im-not-sure-what-this-does">MTN - I’m not sure what this does<a class="anchor" aria-label="anchor" href="#mtn---im-not-sure-what-this-does"></a>
+</h2>
+<p>reduced_binary_counts_matrix_pre&lt;-filtered_return_pre[[1]]</p>
+</div>
+<div class="section level2">
+<h2 id="mtn---or-this-">MTN - or this.<a class="anchor" aria-label="anchor" href="#mtn---or-this-"></a>
+</h2>
+<p>gs_scorer_genes&lt;-filtered_return_pre[[2]]</p>
+<p>#Create list_of_cell_position_frequencies using valid indices
+list_of_cell_position_frequencies &lt;-
+create_racing_lines(reduced_binary_counts_matrix_pre,
+gs_scorer_genes)</p>
+</div>
+<div class="section level2">
+<h2 id="combining-all-cells-racing-lines-after-binerization-owens-way-2">Combining all cells racing lines after binerization (Owen’s
+way)<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-owens-way-2"></a>
+</h2>
+<p>preflat &lt;-
+flatten_cell_frequencies_moi(list_of_cell_position_frequencies)
+plot(colSums(preflat))</p>
+<p>binary_counts_matrix_post&lt;-assays(gs_post)$binary</p>
+<p>#create a reduced binary expression matrix for only the switching
+genes, binary counts is from the patient and gs scorer is from atlas
+filtered_return_post&lt;-filter_gene_expression_for_switching_genes(binary_counts_matrix_post,
+gs_scorer_genes)</p>
+</div>
+<div class="section level2">
+<h2 id="mtn---im-not-sure-what-this-does-1">MTN - I’m not sure what this does<a class="anchor" aria-label="anchor" href="#mtn---im-not-sure-what-this-does-1"></a>
+</h2>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reduced_binary_counts_matrix_post</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="mtn---or-this--1">MTN - or this.<a class="anchor" aria-label="anchor" href="#mtn---or-this--1"></a>
+</h2>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_scorer_genes</span><span class="op">&lt;-</span><span class="va">filtered_return_post</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<p>#Create list_of_cell_position_frequencies using valid indices</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">list_of_cell_position_frequencies</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_racing_lines.html">create_racing_lines</a></span><span class="op">(</span><span class="va">reduced_binary_counts_matrix_post</span>, <span class="va">gs_scorer_genes</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="combining-all-cells-racing-lines-after-binerization-and-plot">Combining all cells racing lines after binerization and plot<a class="anchor" aria-label="anchor" href="#combining-all-cells-racing-lines-after-binerization-and-plot"></a>
+</h2>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">postflat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_cell_frequencies_moi.html">flatten_cell_frequencies_moi</a></span><span class="op">(</span><span class="va">list_of_cell_position_frequencies</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="view-the-differnece-between-patients">view the differnece between patients<a class="anchor" aria-label="anchor" href="#view-the-differnece-between-patients"></a>
+</h3>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">patient_diff</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">postflat</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">preflat</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">patient_diff</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
