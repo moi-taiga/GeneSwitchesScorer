@@ -359,8 +359,9 @@ create_racing_lines<-function(reduced_binary_counts_matrix,gs_scorer_genes) {
 #list_of_cell_position_frequencies <- create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)
 ```
 
-# Combining all cells racing lines after binerization (Owen's way)
-# TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive. 
+## Combining all cells racing lines after binerization (Owen's way)
+#### *TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive. *
+```{r, eval = FALSE}
 flatten_cell_frequencies_owen <- function(list_of_cell_position_frequencies) {
   all_patient_cells_scored_flat <- list()
   length_of_list <- length(list_of_cell_position_frequencies)
@@ -371,10 +372,12 @@ flatten_cell_frequencies_owen <- function(list_of_cell_position_frequencies) {
   flat_matrix <- do.call(rbind, all_patient_cells_scored_flat)
   return(flat_matrix)
 }
+```
 
-# Combining all cells racing lines after binerization (Owen's way)
-# DONE: make the high-points into single points in order to mkae the yaxis of the final plot more intuitive. 
-# this is an inelegant solution as it chooses the FIRST column index of the highpoint.
+## Combining all cells racing lines after binerization (Owen's way)
+#### *DONE: make the high-points into single points in order to mkae the yaxis of the final plot more intuitive. *
+#### *this is an inelegant solution as it chooses the FIRST column index of the highpoint.*
+```{r, eval = FALSE}
 flatten_cell_frequencies_owen_done <- function(list_of_cell_position_frequencies) {
   all_patient_cells_scored_flat <- list()
   length_of_list <- length(list_of_cell_position_frequencies)
@@ -387,8 +390,10 @@ flatten_cell_frequencies_owen_done <- function(list_of_cell_position_frequencies
   flat_matrix <- do.call(rbind, all_patient_cells_scored_flat)
   return(flat_matrix)
 }
+```
 
-# Combining all cells racing lines with out binerization (Moi's way). 
+## Combining all cells racing lines without binerization (Moi's way). 
+```{r, eval = FALSE}
 flatten_cell_frequencies_moi <- function(list_of_cell_position_frequencies) {
   #making an empty flat matrix
   all_patient_cells_scored_flat <- matrix(0, nrow = 1, ncol = 100)
@@ -404,29 +409,46 @@ flatten_cell_frequencies_moi <- function(list_of_cell_position_frequencies) {
   
   return(all_patient_cells_scored_flat)
 }
+```
 
-
+## select_evenly_distributed_switching_genes
+```{r, eval = FALSE}
 gs_scorer_genes <- select_evenly_distributed_switching_genes(sg_allgenes_umap, min_time_spacing = 5)
-
+```
+## plot
+```{r, eval = FALSE}
 plot_timeline_ggplot(gs_scorer_genes, timedata = sce_gs$Pseudotime, txtsize = 3)
+```
 
-#subsetting the pre-treatment patient data to only include the exhaustion trajectory.
+## subsetting the pre-treatment patient data to only include the exhaustion trajectory.
+```{r, eval = FALSE}
 pre_T.seu <- subset(x = PTCL_PRE_ss, subset = predicted.cell_type %in% c("Naive T cells","Cytotoxic CD8 T cells", "Terminally exhausted CD8 T cells"))
-# subsetting the post treatment patient data to only include the exhaustion trajectory.
+```
+## subsetting the post treatment patient data to only include the exhaustion trajectory.
+```{r, eval = FALSE}
 post_T.seu <- subset(x = PTCL_POST_ss, subset = predicted.cell_type %in% c("Naive T cells","Cytotoxic CD8 T cells", "Terminally exhausted CD8 T cells"))
+```
 
-# converting the pre-treatment patient data to SCE.
+## converting the pre-treatment patient data to SCE.
+```{r, eval = FALSE}
 pre.sce <- as.SingleCellExperiment(pre_T.seu)
+```
 
-# converting the pre-treatment patient data to SCE.
+## converting the pre-treatment patient data to SCE.
+```{r, eval = FALSE}
 post.sce <- as.SingleCellExperiment(post_T.seu)
+```
 
-# convert the pre treatment patient data to a GS obj. 
+## convert the pre treatment patient data to a GS obj. 
+```{r, eval = FALSE}
 gs_pre <- SingleCellExperiment(assays = List(expdata = logcounts(pre.sce)))
-# convert the post treatment patient data to a GS obj. 
+```
+## convert the post treatment patient data to a GS obj. 
+```{r, eval = FALSE}
 gs_post <- SingleCellExperiment(assays = List(expdata = logcounts(post.sce)))
-
-# TODO check if this cutoff is suitable for the patient data. 
+```
+## TODO check if this cutoff is suitable for the patient data. 
+```{r, eval = FALSE}
 bn_cutoff <- 0.2
 # binarize pre treatment patient data
 gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
@@ -434,28 +456,38 @@ gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 gs_post<- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 
 binary_counts_matrix_pre<-assays(gs_pre)$binary
+```
 
 #create a reduced binary expression matrix for only the switching genes, binary counts is from the patient and gs scorer is from atlas
+```{r, eval = FALSE}
 filtered_return_pre<-filter_gene_expression_for_switching_genes(binary_counts_matrix_pre, gs_scorer_genes)
+```
 
 # MTN - I'm not sure what this does
+```{r, eval = FALSE}
 reduced_binary_counts_matrix_pre<-filtered_return_pre[[1]]
-
+```
 # MTN - or this.
+```{r, eval = FALSE}
 gs_scorer_genes<-filtered_return_pre[[2]]
-
+```
 
 #Create list_of_cell_position_frequencies using valid indices
+```{r, eval = FALSE}
 list_of_cell_position_frequencies <- create_racing_lines(reduced_binary_counts_matrix_pre, gs_scorer_genes)
-
+```
 # Combining all cells racing lines after binerization (Owen's way)
+```{r, eval = FALSE}
 preflat <- flatten_cell_frequencies_moi(list_of_cell_position_frequencies)
 plot(colSums(preflat))
 
 binary_counts_matrix_post<-assays(gs_post)$binary
+```
 
 #create a reduced binary expression matrix for only the switching genes, binary counts is from the patient and gs scorer is from atlas
+```{r, eval = FALSE}
 filtered_return_post<-filter_gene_expression_for_switching_genes(binary_counts_matrix_post, gs_scorer_genes)
+```
 
 # MTN - I'm not sure what this does
 ```{r, eval = FALSE}
