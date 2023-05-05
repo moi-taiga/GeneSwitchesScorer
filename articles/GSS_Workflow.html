@@ -235,31 +235,42 @@ negative expression…<br><code>{r, eval = FALSE} hist(as.numeric(assays(gs_atla
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">0.3</span></span>
 <span><span class="co"># binarize pre treatment patient data</span></span>
-<span><span class="co">#gs_pre&lt;- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)</span></span>
+<span><span class="va">gs_pre</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_pre</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
 <span><span class="co"># binarize post treatment patient data</span></span>
-<span><span class="co">#gs_post&lt;- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)</span></span>
+<span><span class="va">gs_post</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_post</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
 <span><span class="co"># binarize atlas data</span></span>
-<span><span class="va">gs_atlas</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_atlas</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">gs_atlas_binerized</span> <span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">gs_atlas</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="fit-logistic-regression-and-find-the-switching-pseudo-time-point-for-each-gene">fit logistic regression and find the switching pseudo-time point for
+each gene<a class="anchor" aria-label="anchor" href="#fit-logistic-regression-and-find-the-switching-pseudo-time-point-for-each-gene"></a>
+</h2>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_atlas_glm</span> <span class="op">&lt;-</span> <span class="fu">find_switch_logistic_fastglm</span><span class="op">(</span><span class="va">gs_atlas_binerized</span>, downsample <span class="op">=</span> <span class="cn">FALSE</span>, show_warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="filter-switching-genes">Filter Switching Genes<a class="anchor" aria-label="anchor" href="#filter-switching-genes"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">sg_allgenes</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">gs_atlas</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">sg_allgenes</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">gs_atlas</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>, topnum <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="currently-using-the-default-cutoff-of-0-03-which-gives-29-genes-">*currently using the default cutoff of 0.03 which gives 29
+genes.<a class="anchor" aria-label="anchor" href="#currently-using-the-default-cutoff-of-0-03-which-gives-29-genes-"></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">gs_atlas_r203</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">gs_atlas_glm</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>,r2cutoff <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="optional-view-the-timeline-of-the-filtered-switching-genes-from-the-atlas-">Optional: view the timeline of the filtered switching genes from the
 Atlas.<a class="anchor" aria-label="anchor" href="#optional-view-the-timeline-of-the-filtered-switching-genes-from-the-atlas-"></a>
 </h3>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#plot_timeline_ggplot(sg_atlas, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">gs_atlas_r203</span>, timedata <span class="op">=</span> <span class="fu">colData</span><span class="op">(</span><span class="va">gs_atlas</span><span class="op">)</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="select-evenly-distributed-switching-genes">Select evenly distributed switching genes<a class="anchor" aria-label="anchor" href="#select-evenly-distributed-switching-genes"></a>
 </h2>
 <p>remember to define the minimum time spacing</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_scorer_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_evenly_distributed_switching_genes.html">select_evenly_distributed_switching_genes</a></span><span class="op">(</span><span class="va">sg_allgenes</span>, min_time_spacing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
