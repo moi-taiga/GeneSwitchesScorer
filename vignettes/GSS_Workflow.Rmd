@@ -176,9 +176,9 @@ When checking if the 0.2 cutoff is appropriate I found there to be negative expr
 ```{r, eval = FALSE}
 bn_cutoff <- 0.3
 # binarize pre treatment patient data
-gs_pre<- binarize_exp(gs_pre, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+pre.gs<- binarize_exp(pre.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize post treatment patient data
-gs_post<- binarize_exp(gs_post, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+post.gs<- binarize_exp(post.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize atlas data
 gs_atlas_binerized <- binarize_exp(gs_atlas, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 ```
