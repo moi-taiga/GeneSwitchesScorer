@@ -161,11 +161,11 @@ lines(SlingshotDataSet(atlas_exhaustion.sce), lwd=2, col='black')
 ## Convert the SingleCellExperiment objects to GeneSwitches Objects.
 ```{r, eval = FALSE}
 # convert the pre treatment patient data to a GS obj. 
-gs_pre <- SingleCellExperiment(assays = List(expdata = logcounts(pre.sce)))
+pre.gs <- SingleCellExperiment(assays = List(expdata = logcounts(pre.sce)))
 # convert the post treatment patient data to a GS obj. 
-gs_post <- SingleCellExperiment(assays = List(expdata = logcounts(post.sce)))
+post.gs <- SingleCellExperiment(assays = List(expdata = logcounts(post.sce)))
 # convert the atlas data to a GS obj.
-gs_atlas <- SingleCellExperiment(assays = List(expdata = logcounts(atlas_exhaustion.sce)))
+atlas.gs <- SingleCellExperiment(assays = List(expdata = logcounts(atlas_exhaustion.sce)))
 colData(gs_atlas)$Pseudotime <- -atlas_exhaustion.sce$slingPseudotime_1
 reducedDims(gs_atlas) <- SimpleList(UMAP = reducedDim(atlas_exhaustion.sce, "UMAP", withDimnames=TRUE))
 ```
