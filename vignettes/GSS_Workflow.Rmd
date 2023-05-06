@@ -41,6 +41,8 @@ This workflow uses data from "A Single-Cell Tumor Immune Atlas for Precision Onc
 https://zenodo.org/record/5205544 \
 It also uses **###** as the sample/patient data. 
 both are seurat objects.
+
+Download these from the above links and load them into your environment using:
 ```{r, eval = FALSE}
 atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
 pre.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_PRE.rds")
