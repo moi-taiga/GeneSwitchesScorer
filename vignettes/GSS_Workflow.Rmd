@@ -119,7 +119,7 @@ atlas_subset_exhaustion.seu <- FindClusters(atlas_subset_exhaustion.seu, resolut
 
 ### Optional: view the umaps of the processed atlas data. 
 ```{r, eval = FALSE}
-DimPlot(object = atlas_exhaustion.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
+DimPlot(object = atlas_subset_exhaustion.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
   ggtitle("Subsetted and processed Atlas")
 ```
 
@@ -183,27 +183,30 @@ pre.gs<- binarize_exp(pre.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize post treatment patient data
 post.gs<- binarize_exp(post.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize atlas data
-gs_atlas_binerized <- binarize_exp(atlas.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+atlas_binerized.gs <- binarize_exp(atlas.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 ```
 
 ## fit logistic regression and find the switching pseudo-time point for each gene
 ```{r, eval = FALSE}
-gs_atlas_glm <- find_switch_logistic_fastglm(gs_atlas_binerized, downsample = FALSE, show_warning = FALSE)
+atlas_glm.gs <- find_switch_logistic_fastglm(atlas_binerized.gs, downsample = FALSE, show_warning = FALSE)
+dim(atlas_glm.gs)
 ```
 
 ## Filter Switching Genes
 ### ~*currently using the default cutoff of 0.03 which gives 29 genes.*~
 ### ~*currently using a cutoff of 0.01 which gives 108 genes.*~
-### *currently using a cutoff of 0.005 which gives 148 genes.*
+### ~*currently using a cutoff of 0.005 which gives 148 genes.*~
 ```{r, eval = FALSE}
-gs_atlas_r2005 <- filter_switchgenes(gs_atlas_glm, allgenes = TRUE,r2cutoff = 0.005)
+atlas_filtered.gs <- filter_switchgenes(atlas_glm.gs, allgenes = TRUE,r2cutoff = 0.0000001)
+atlas_filtered.gs <- filter_switchgenes(atlas_glm.gs, allgenes = TRUE, topnum = 100)
+dim(atlas_filtered.gs)
 ```
 
 
 ### Optional: view the timeline of the filtered switching genes from the Atlas.
 ### *Seems a bit odd, maybe it is to do with using logged expression data*
 ```{r, eval = FALSE}
-plot_timeline_ggplot(gs_atlas_r2005, timedata = colData(gs_atlas)$Pseudotime, txtsize = 3)
+plot_timeline_ggplot(atlas_filtered.gs, timedata = colData(atlas.gs)$Pseudotime, txtsize = 3)
 ```
 
 ## Select evenly distributed switching genes
