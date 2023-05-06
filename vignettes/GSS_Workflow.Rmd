@@ -18,9 +18,9 @@ This workflow will take you through using GSS on "patient data" to identify prog
 
 ### Necessary Packages for this Example Workflow: 
 ```{r, eval=FALSE}
+#CRAN
 library(GeneSwitchesScorer)
 library(Seurat)
-library(GeneSwitches)
 library(RColorBrewer)
 
 # library(SeuratObject)
@@ -36,6 +36,9 @@ library(RColorBrewer)
 library(DelayedMatrixStats)
 library(slingshot)
 library(SingleCellExperiment)
+
+#Other
+library(GeneSwitches)
 ```
 
 ## Input Datasets
@@ -66,7 +69,7 @@ DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = 
 ## Subset the objects to only include celltypes involved in the trajectory of interest. 
 ```{r, eval = FALSE}
 # subsetting the pre treatment patient data to only include the exhaustion trajectory.
-pre_T.seu <- subset(x = pre.seu, subset = celltype %in% c("Early_Tcells/CD3+CD4+TIGIT+GATA3+",
+pre_subset_Tcell.seu <- subset(x = pre.seu, subset = celltype %in% c("Early_Tcells/CD3+CD4+TIGIT+GATA3+",
                                                           "CD3+CD4-CD8-TIGIT+_Tcell3",
                                                           "CD3+CD4-CD8+TIGIT+_Tcell2",
                                                           "CD3+CD4-CD8+TIGIT+_Tcells",
@@ -75,7 +78,7 @@ pre_T.seu <- subset(x = pre.seu, subset = celltype %in% c("Early_Tcells/CD3+CD4+
                                                           "Tcell1"))
 
 # subsetting the post treatment patient data to only include the exhaustion trajectory.
-post_T.seu <- subset(x = post.seu, subset = celltype %in% c("CD3+PDCD1+TIGIT+Activated",
+post_subset_Tcell.seu <- subset(x = post.seu, subset = celltype %in% c("CD3+PDCD1+TIGIT+Activated",
                                                             "Tcell2_CD3+GATA3+TIGIT+",
                                                             "Tcell_CD3+GATA3+TIGIT+",
                                                             "Cytotoxic_CD8Tcell",
@@ -84,18 +87,18 @@ post_T.seu <- subset(x = post.seu, subset = celltype %in% c("CD3+PDCD1+TIGIT+Act
                                                             "Tcell2"))
 
 # Subsetting the Atlas data into 3 types of Tcells for the exhaustion trajectory.
-atlas_exhaustion.seu <- subset(x = atlas.seu, subset = lv1_annot %in% c("T cells naive",
+atlas_subset_exhaustion.seu <- subset(x = atlas.seu, subset = lv1_annot %in% c("T cells naive",
                                                                         "CD8 cytotoxic", 
                                                                         "CD8 terminally exhausted"))
 ```
 
 ### Optional: view the umaps of the subsetted data. 
 ```{r, eval = FALSE}
-DimPlot(object = pre_T.seu, reduction = "umap", group.by = "celltype" ,label = T) +
+DimPlot(object = pre_subset_Tcell.seu, reduction = "umap", group.by = "celltype" ,label = T) +
   ggtitle("Subsetted Pre-treatment")
-DimPlot(object = post_T.seu, reduction = "umap", group.by = "celltype" ,label = T) +
+DimPlot(object = post_subset_Tcell.seu, reduction = "umap", group.by = "celltype" ,label = T) +
   ggtitle("Subsetted Post-treatment")
-DimPlot(object = atlas_exhaustion.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
+DimPlot(object = atlas_subset_exhaustion.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
   ggtitle("Subsetted Atlas")
 ```
 
@@ -103,15 +106,15 @@ DimPlot(object = atlas_exhaustion.seu, reduction = "umap", group.by = "lv1_annot
 ## Process the atlas data using Seurat. 
 ```{r, eval = FALSE}
 # Scale Data
-atlas_exhaustion.seu <- ScaleData(atlas_exhaustion.seu)
+atlas_subset_exhaustion.seu <- ScaleData(atlas_subset_exhaustion.seu)
 # Run PCA
-atlas_exhaustion.seu <- RunPCA(atlas_exhaustion.seu)
+atlas_subset_exhaustion.seu <- RunPCA(atlas_subset_exhaustion.seu)
 # Run UMAP
-atlas_exhaustion.seu <- RunUMAP(atlas_exhaustion.seu, dims = 1:30)
+atlas_subset_exhaustion.seu <- RunUMAP(atlas_subset_exhaustion.seu, dims = 1:30)
 # FindNeighbors
-atlas_exhaustion.seu <- FindNeighbors(atlas_exhaustion.seu, reduction = "pca", dims = 1:30)
+atlas_subset_exhaustion.seu <- FindNeighbors(atlas_subset_exhaustion.seu, reduction = "pca", dims = 1:30)
 # FindClusters
-atlas_exhaustion.seu <- FindClusters(atlas_exhaustion.seu, resolution = 0.5)
+atlas_subset_exhaustion.seu <- FindClusters(atlas_subset_exhaustion.seu, resolution = 0.5)
 ```
 
 ### Optional: view the umaps of the processed atlas data. 
@@ -129,13 +132,13 @@ pre.sce <- as.SingleCellExperiment(pre.seu)
 post.sce <- as.SingleCellExperiment(post.seu)
 
 # converting the atlas data to SCE.
-atlas_exhaustion.sce <- as.SingleCellExperiment(atlas_exhaustion.seu)
+atlas.sce <- as.SingleCellExperiment(atlas_subset_exhaustion.seu)
 ```
 
 ## Use slingshot to produce an exhaustion Trajectory for the Tcells.
 ```{r, eval = FALSE}
 #Run slingshot on the Atlas data.
-atlas_exhaustion.sce  <- slingshot(atlas_exhaustion.sce, 
+atlas_sling.sce  <- slingshot(atlas.sce, 
                                    clusterLabels = "lv1_annot", 
                                    start.clus  = "T cells naive", 
                                    end.clus = "CD8 terminally exhausted", 
@@ -145,7 +148,7 @@ atlas_exhaustion.sce  <- slingshot(atlas_exhaustion.sce,
 #### Check:
 Not sure if I Want to keep this .
 ```{r, eval = FALSE}
-summary(atlas_exhaustion.sce$slingPseudotime_1)
+summary(atlas_sling.sce$slingPseudotime_1)
 ```
 
 
@@ -153,9 +156,9 @@ summary(atlas_exhaustion.sce$slingPseudotime_1)
 ```{r, eval = FALSE}
 #Plot the slingshot trajectory.
 colors <- colorRampPalette(brewer.pal(11,'Spectral')[-6])(100)
-plotcol <- colors[cut(atlas_exhaustion.sce$slingPseudotime_1, breaks=100)]
-plot(reducedDims(atlas_exhaustion.sce)$UMAP, col = plotcol, pch=16, asp = 1)
-lines(SlingshotDataSet(atlas_exhaustion.sce), lwd=2, col='black')
+plotcol <- colors[cut(atlas_sling.sce$slingPseudotime_1, breaks=100)]
+plot(reducedDims(atlas_sling.sce)$UMAP, col = plotcol, pch=16, asp = 1)
+lines(SlingshotDataSet(atlas_sling.sce), lwd=2, col='black')
 ```
 
 ## Convert the SingleCellExperiment objects to GeneSwitches Objects.
@@ -165,22 +168,22 @@ pre.gs <- SingleCellExperiment(assays = List(expdata = logcounts(pre.sce)))
 # convert the post treatment patient data to a GS obj. 
 post.gs <- SingleCellExperiment(assays = List(expdata = logcounts(post.sce)))
 # convert the atlas data to a GS obj.
-atlas.gs <- SingleCellExperiment(assays = List(expdata = logcounts(atlas_exhaustion.sce)))
-colData(gs_atlas)$Pseudotime <- -atlas_exhaustion.sce$slingPseudotime_1
-reducedDims(gs_atlas) <- SimpleList(UMAP = reducedDim(atlas_exhaustion.sce, "UMAP", withDimnames=TRUE))
+atlas.gs <- SingleCellExperiment(assays = List(expdata = logcounts(atlas_sling.sce)))
+colData(atlas.gs)$Pseudotime <- -atlas_sling.sce$slingPseudotime_1
+reducedDims(atlas.gs) <- SimpleList(UMAP = reducedDim(atlas_sling.sce, "UMAP", withDimnames=TRUE))
 ```
 
 ## Binarize
 When checking if the 0.2 cutoff is appropriate I found there to be negative expression... \
 ```{r, eval = FALSE} hist(as.numeric(assays(gs_atlas)$expdata))``` \
 ```{r, eval = FALSE}
-bn_cutoff <- 0.3
+bn_cutoff <- 0.7
 # binarize pre treatment patient data
 pre.gs<- binarize_exp(pre.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize post treatment patient data
 post.gs<- binarize_exp(post.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 # binarize atlas data
-gs_atlas_binerized <- binarize_exp(gs_atlas, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
+gs_atlas_binerized <- binarize_exp(atlas.gs, fix_cutoff = TRUE, binarize_cutoff = bn_cutoff)
 ```
 
 ## fit logistic regression and find the switching pseudo-time point for each gene
