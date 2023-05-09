@@ -75,8 +75,56 @@ DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = 
 # While using this data I am having to edit sctransforms source code :/
 # Use `fixInNamespace("make_cell_attr", "sctransform")`
 # Change identical to setequal.
-atlas_sctransformed.seu <- SCTransform(atlas.seu, verbose = FALSE)
+atlas.seu <- SCTransform(atlas.seu, verbose = FALSE)
 ```
+
+## Find transfer anchors for the patient data
+```{r, eval = FALSE}
+
+# Post
+post_anchors <- FindTransferAnchors(
+  reference = atlas.seu,
+  query = post.seu,
+  normalization.method = "SCT",
+  reference.reduction = "pca",
+  dims = 1:20
+)
+
+# Pre
+pre_anchors <- FindTransferAnchors(
+  reference = atlas.seu,
+  query = pre.seu,
+  normalization.method = "SCT",
+  reference.reduction = "pca",
+  dims = 1:20
+)
+```
+
+## Map Query
+```{r, eval = FALSE}
+post.seu <- MapQuery(
+  anchorset = post_anchors,
+  query = post.seu,
+  reference = atlas.seu,
+  refdata = list(
+    cell_type = "cell_type"
+  ),
+  reference.reduction = "pca"
+)
+
+pre.seu <- MapQuery(
+  anchorset = pre_anchors,
+  query = pre.seu,
+  reference = atlas.seu,,
+  refdata = list(
+    cell_type = "cell_type"
+  ),
+  reference.reduction = "pca"
+)
+```
+
+
+# End of label transfer and integration section
 
 ## Subset the objects to only include celltypes involved in the trajectory of interest. 
 ```{r, eval = FALSE}
@@ -119,6 +167,7 @@ DimPlot(object = atlas_subset_exhaustion.seu, reduction = "umap", group.by = "lv
 ```{r, eval = FALSE}
 # Scale Data
 # this will be replaced by SCTRANSFORM
+# Has been replaced by SCTransform()
 atlas_subset_exhaustion.seu <- ScaleData(atlas_subset_exhaustion.seu)
 # Run PCA
 atlas_subset_exhaustion.seu <- RunPCA(atlas_subset_exhaustion.seu)
