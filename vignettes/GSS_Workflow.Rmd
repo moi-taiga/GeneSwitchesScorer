@@ -19,17 +19,15 @@ This workflow will take you through using GSS on "patient data" to identify prog
 ### Necessary Packages for this Example Workflow: 
 ```{r, eval=FALSE}
 #CRAN
-library(GeneSwitchesScorer)
 library(Seurat)
 library(RColorBrewer)
-
+library(ggplot2)
 # library(SeuratObject)
 # library(sp)
 # library(data.table)
 # library(reticulate)
 # library(patchwork)
 # library(parallel)
-# library(ggplot2)
 # library(Matrix)
 
 #BiocMnager
@@ -39,6 +37,7 @@ library(SingleCellExperiment)
 
 #Other
 library(GeneSwitches)
+library(GeneSwitchesScorer)
 ```
 
 ## Input Datasets
