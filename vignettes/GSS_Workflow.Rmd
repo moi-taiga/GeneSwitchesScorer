@@ -49,8 +49,8 @@ both are seurat objects.
 
 Download these from the above links and load them into your environment using:
 ```{r, eval = FALSE}
-#atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
-atlas.seu <- readRDS("~/R Packages/mini_data/TICAtlas_downsampled.rds")
+atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
+#atlas.seu <- readRDS("~/R Packages/mini_data/TICAtlas_downsampled.rds")
 pre.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_PRE.rds")
 post.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_POST.rds")
 ```
@@ -62,20 +62,20 @@ DimPlot(object = pre.seu, reduction = "umap", group.by = "celltype" ,label = T) 
   ggtitle("Pre-treatment")
 DimPlot(object = post.seu, reduction = "umap", group.by = "celltype" ,label = T) +
   ggtitle("POST-treatment")
-#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
-#  ggtitle("Atlas")
 DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
   ggtitle("Atlas")
+#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
+#  ggtitle("Atlas")
 ```
 
 # Begin label transfer and integration. 
 
 ## Sctransform the atlas.
 ```{r, eval = FALSE}
-atlas_sctransformed.seu <- SCTransform(atlas.seu, vst.flavor = "v2", verbose = FALSE)
-
-# run sctransform
-pbmc <- SCTransform(atlas.seu, vars.to.regress = "percent.mt", verbose = FALSE)
+# While using this data I am having to edit sctransforms source code :/
+# Use `fixInNamespace("make_cell_attr", "sctransform")`
+# Change identical to setequal.
+atlas_sctransformed.seu <- SCTransform(atlas.seu, verbose = FALSE)
 ```
 
 ## Subset the objects to only include celltypes involved in the trajectory of interest. 
