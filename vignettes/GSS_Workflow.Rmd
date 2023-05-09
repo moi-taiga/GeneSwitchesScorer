@@ -49,7 +49,8 @@ both are seurat objects.
 
 Download these from the above links and load them into your environment using:
 ```{r, eval = FALSE}
-atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
+#atlas.seu <- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")
+atlas.seu <- readRDS("~/R Packages/mini_data/TICAtlas_downsampled.rds")
 pre.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_PRE.rds")
 post.seu <- readRDS("~/R Packages/mini_data/mini_PTCL_POST.rds")
 ```
@@ -61,8 +62,20 @@ DimPlot(object = pre.seu, reduction = "umap", group.by = "celltype" ,label = T) 
   ggtitle("Pre-treatment")
 DimPlot(object = post.seu, reduction = "umap", group.by = "celltype" ,label = T) +
   ggtitle("POST-treatment")
+#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
+#  ggtitle("Atlas")
 DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +
   ggtitle("Atlas")
+```
+
+# Begin label transfer and integration. 
+
+## Sctransform the atlas.
+```{r, eval = FALSE}
+atlas_sctransformed.seu <- SCTransform(atlas.seu, vst.flavor = "v2", verbose = FALSE)
+
+# run sctransform
+pbmc <- SCTransform(atlas.seu, vars.to.regress = "percent.mt", verbose = FALSE)
 ```
 
 ## Subset the objects to only include celltypes involved in the trajectory of interest. 
@@ -105,6 +118,7 @@ DimPlot(object = atlas_subset_exhaustion.seu, reduction = "umap", group.by = "lv
 ## Process the atlas data using Seurat. 
 ```{r, eval = FALSE}
 # Scale Data
+# this will be replaced by SCTRANSFORM
 atlas_subset_exhaustion.seu <- ScaleData(atlas_subset_exhaustion.seu)
 # Run PCA
 atlas_subset_exhaustion.seu <- RunPCA(atlas_subset_exhaustion.seu)
