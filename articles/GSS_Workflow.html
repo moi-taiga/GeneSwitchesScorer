@@ -119,8 +119,8 @@ seurat objects.</p>
 <p>Download these from the above links and load them into your
 environment using:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#atlas.seu &lt;- readRDS("~/R Packages/mini_data/mini_TICAtlas.rds")</span></span>
-<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/TICAtlas_downsampled.rds"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_TICAtlas.rds"</span><span class="op">)</span></span>
+<span><span class="co">#atlas.seu &lt;- readRDS("~/R Packages/mini_data/TICAtlas_downsampled.rds")</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_PRE.rds"</span><span class="op">)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_POST.rds"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
@@ -132,10 +132,10 @@ environment using:</p>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Pre-treatment"</span><span class="op">)</span></span>
 <span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">post.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"celltype"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"POST-treatment"</span><span class="op">)</span></span>
-<span><span class="co">#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +</span></span>
-<span><span class="co">#  ggtitle("Atlas")</span></span>
 <span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"lv1_annot"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Atlas"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Atlas"</span><span class="op">)</span></span>
+<span><span class="co">#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +</span></span>
+<span><span class="co">#  ggtitle("Atlas")</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -145,10 +145,10 @@ environment using:</p>
 <h3 id="sctransform-the-atlas-">Sctransform the atlas.<a class="anchor" aria-label="anchor" href="#sctransform-the-atlas-"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atlas_sctransformed.seu</span> <span class="op">&lt;-</span> <span class="fu">SCTransform</span><span class="op">(</span><span class="va">atlas.seu</span>, vst.flavor <span class="op">=</span> <span class="st">"v2"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># run sctransform</span></span>
-<span><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">SCTransform</span><span class="op">(</span><span class="va">atlas.seu</span>, vars.to.regress <span class="op">=</span> <span class="st">"percent.mt"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># While using this data I am having to edit sctransforms source code :/</span></span>
+<span><span class="co"># Use `fixInNamespace("make_cell_attr", "sctransform")`</span></span>
+<span><span class="co"># Change identical to setequal.</span></span>
+<span><span class="va">atlas_sctransformed.seu</span> <span class="op">&lt;-</span> <span class="fu">SCTransform</span><span class="op">(</span><span class="va">atlas.seu</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="subset-the-objects-to-only-include-celltypes-involved-in-the-trajectory-of-interest-">Subset the objects to only include celltypes involved in the
