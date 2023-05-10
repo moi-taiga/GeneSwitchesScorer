@@ -119,8 +119,8 @@ seurat objects.</p>
 <p>Download these from the above links and load them into your
 environment using:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_TICAtlas.rds"</span><span class="op">)</span></span>
-<span><span class="co">#atlas.seu &lt;- readRDS("~/R Packages/mini_data/TICAtlas_downsampled.rds")</span></span>
+<code class="sourceCode R"><span><span class="co">#load in the data</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_TICAtlas.rds"</span><span class="op">)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_PRE.rds"</span><span class="op">)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"~/R Packages/mini_data/mini_PTCL_POST.rds"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
@@ -133,18 +133,35 @@ environment using:</p>
 <span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">post.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"celltype"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"POST-treatment"</span><span class="op">)</span></span>
 <span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"lv1_annot"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Atlas"</span><span class="op">)</span></span>
-<span><span class="co">#DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = T) +</span></span>
-<span><span class="co">#  ggtitle("Atlas")</span></span></code></pre></div>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Atlas"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
-<h2 id="begin-label-transfer-and-integration-">Begin label transfer and integration.<a class="anchor" aria-label="anchor" href="#begin-label-transfer-and-integration-"></a>
+<h2 id="begin-label-transfer-and-integration-">
+<strong>Begin label transfer and integration. </strong><a class="anchor" aria-label="anchor" href="#begin-label-transfer-and-integration-"></a>
 </h2>
+<div class="section level3">
+<h3 id="subset-the-patient-data">Subset the patient data<a class="anchor" aria-label="anchor" href="#subset-the-patient-data"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="i-think-this-is-removing-columns-with-fewer-than-200-">
+<em>I think this is removing columns with fewer than 200.</em><a class="anchor" aria-label="anchor" href="#i-think-this-is-removing-columns-with-fewer-than-200-"></a>
+</h3>
+</div>
+<div class="section level3">
+<h3 id="this-may-not-be-necessary-looks-to-me-like-the-lowest-values-are-500-">
+<em>This may not be necessary, looks to me like the lowest values
+are ~500.</em><a class="anchor" aria-label="anchor" href="#this-may-not-be-necessary-looks-to-me-like-the-lowest-values-are-500-"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">post.seu</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pre.seu</span>, subset <span class="op">=</span> <span class="va">nFeature_RNA</span> <span class="op">&gt;</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="sctransform-the-atlas-">Sctransform the atlas.<a class="anchor" aria-label="anchor" href="#sctransform-the-atlas-"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># While using this data I am having to edit sctransforms source code :/</span></span>
 <span><span class="co"># Use `fixInNamespace("make_cell_attr", "sctransform")`</span></span>
 <span><span class="co"># Change identical to setequal.</span></span>
@@ -153,7 +170,7 @@ environment using:</p>
 <div class="section level3">
 <h3 id="find-transfer-anchors-for-the-patient-data">Find transfer anchors for the patient data<a class="anchor" aria-label="anchor" href="#find-transfer-anchors-for-the-patient-data"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Post</span></span>
 <span><span class="va">post_anchors</span> <span class="op">&lt;-</span> <span class="fu">FindTransferAnchors</span><span class="op">(</span></span>
@@ -176,13 +193,13 @@ environment using:</p>
 <div class="section level3">
 <h3 id="map-query">Map Query<a class="anchor" aria-label="anchor" href="#map-query"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">MapQuery</span><span class="op">(</span></span>
 <span>  anchorset <span class="op">=</span> <span class="va">post_anchors</span>,</span>
 <span>  query <span class="op">=</span> <span class="va">post.seu</span>,</span>
 <span>  reference <span class="op">=</span> <span class="va">atlas.seu</span>,</span>
 <span>  refdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    cell_type <span class="op">=</span> <span class="st">"cell_type"</span></span>
+<span>    cell_type <span class="op">=</span> <span class="st">"lv1_annot"</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span></span>
 <span><span class="op">)</span></span>
@@ -192,10 +209,123 @@ environment using:</p>
 <span>  query <span class="op">=</span> <span class="va">pre.seu</span>,</span>
 <span>  reference <span class="op">=</span> <span class="va">atlas.seu</span>,,</span>
 <span>  refdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>    cell_type <span class="op">=</span> <span class="st">"cell_type"</span></span>
+<span>    cell_type <span class="op">=</span> <span class="st">"lv1_annot"</span></span>
 <span>  <span class="op">)</span>,</span>
 <span>  reference.reduction <span class="op">=</span> <span class="st">"pca"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="remove-cells-from-the-patient-data-which-dont-have-a-confident-cell_type-prediction-">Remove cells from the patient data which dont have a confident
+cell_type prediction.<a class="anchor" aria-label="anchor" href="#remove-cells-from-the-patient-data-which-dont-have-a-confident-cell_type-prediction-"></a>
+</h3>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">pre.seu</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type.score</span> <span class="op">&gt;</span> <span class="fl">0.65</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">post.seu</span>, subset <span class="op">=</span> <span class="va">predicted.cell_type.score</span> <span class="op">&gt;</span> <span class="fl">0.65</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="process-the-patient-data-using-seurat">Process the patient data using Seurat<a class="anchor" aria-label="anchor" href="#process-the-patient-data-using-seurat"></a>
+</h3>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#pre</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">pre.seu</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span><span class="co">#post</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">post.seu</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="optional-view-the-umaps-of-the-processed-data-">Optional: view the umaps of the processed data.<a class="anchor" aria-label="anchor" href="#optional-view-the-umaps-of-the-processed-data-"></a>
+</h4>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#View UMAPS of each loaded Seurat object</span></span>
+<span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pre.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"predicted.cell_type"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Pre-treatment"</span><span class="op">)</span></span>
+<span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">post.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"predicted.cell_type"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"POST-treatment"</span><span class="op">)</span></span>
+<span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"lv1_annot"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Atlas"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="subset-the-atlas-data-to-only-include-celltypes-involved-in-the-tcell-exhaustion-trajectory-">Subset the atlas data to only include celltypes involved in the
+Tcell exhaustion trajectory.<a class="anchor" aria-label="anchor" href="#subset-the-atlas-data-to-only-include-celltypes-involved-in-the-tcell-exhaustion-trajectory-"></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Subsetting the Atlas data into 3 types of Tcells for the exhaustion trajectory.</span></span>
+<span><span class="co">#atlas_subset_exhaustion.seu</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">atlas.seu</span>, subset <span class="op">=</span> <span class="va">lv1_annot</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"T cells naive"</span>,</span>
+<span>                                                                                <span class="st">"CD8 cytotoxic"</span>,</span>
+<span>                                                                                <span class="st">"CD8 terminally</span></span>
+<span><span class="st">                                                                               exhausted"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="split-and-re-integrate-the-atlas-object">
+<strong>Split and re-integrate the atlas object</strong><a class="anchor" aria-label="anchor" href="#split-and-re-integrate-the-atlas-object"></a>
+</h3>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## Split the atlast object by source.</span></span>
+<span><span class="va">atlas_sources</span> <span class="op">&lt;-</span> <span class="fu">SplitObject</span><span class="op">(</span><span class="va">atlas.seu</span>, split.by <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Make an empty list to store the filtered seurat objects</span></span>
+<span><span class="va">filtered_atlas_sources</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Loop through the `atlas_sources` and add objects which have more than 100 cells to the new list. </span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">atlas_sources</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Check the number of cells in the Seurat object</span></span>
+<span>  <span class="va">num_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">assays</span><span class="op">$</span><span class="va">RNA</span><span class="op">@</span><span class="va">counts</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> </span>
+<span>  <span class="co"># If the number of cells is less than 100, skip this Seurat object</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">num_cells</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">next</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="co"># Otherwise, add the Seurat object to the filtered list</span></span>
+<span>  <span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co">## Some Seurat processing on the objects in the new filtered list</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span>,</span>
+<span>                                            scale.factor <span class="op">=</span> <span class="fl">10000</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>  <span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, selection.method <span class="op">=</span> <span class="st">"vst"</span>, </span>
+<span>                                                   nfeatures <span class="op">=</span> <span class="fl">1500</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="intregrate-all-genes-common-between-snrna-and-scrna-">Intregrate all genes common between snRNA and scRNA.<a class="anchor" aria-label="anchor" href="#intregrate-all-genes-common-between-snrna-and-scrna-"></a>
+</h3>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">seuAnch</span> <span class="op">&lt;-</span> <span class="fu">FindIntegrationAnchors</span><span class="op">(</span><span class="va">filtered_atlas_sources</span>, anchor.features <span class="op">=</span> <span class="fl">1500</span>, </span>
+<span>                                 normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span>, </span>
+<span>                                 reduction <span class="op">=</span> <span class="st">"cca"</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,</span>
+<span>                                 k.anchor <span class="op">=</span> <span class="fl">5</span>, k.filter <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>                                 k.score <span class="op">=</span> <span class="fl">30</span>, max.features <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">IntegrateData</span><span class="op">(</span>anchorset <span class="op">=</span> <span class="va">seuAnch</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,</span>
+<span>                    normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">DefaultAssay</span><span class="op">(</span><span class="va">atlas.seu</span><span class="op">)</span> <span class="op">=</span> <span class="st">"integrated"</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">atlas.seu</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">atlas.seu</span><span class="op">)</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">atlas.seu</span>, npcs <span class="op">=</span> <span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
+<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">atlas.seu</span>, resolution <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="plot">Plot<a class="anchor" aria-label="anchor" href="#plot"></a>
+</h4>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"lv1_annot"</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">DimPlot</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, label <span class="op">=</span> <span class="cn">TRUE</span>, repel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
+</div>
 </div>
 </div>
 <div class="section level2">
@@ -205,7 +335,7 @@ environment using:</p>
 <h3 id="subset-the-objects-to-only-include-celltypes-involved-in-the-trajectory-of-interest-">Subset the objects to only include celltypes involved in the
 trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-objects-to-only-include-celltypes-involved-in-the-trajectory-of-interest-"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># subsetting the pre treatment patient data to only include the exhaustion trajectory.</span></span>
 <span><span class="va">pre_subset_Tcell.seu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pre.seu</span>, subset <span class="op">=</span> <span class="va">celltype</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Early_Tcells/CD3+CD4+TIGIT+GATA3+"</span>,</span>
 <span>                                                          <span class="st">"CD3+CD4-CD8-TIGIT+_Tcell3"</span>,</span>
@@ -231,7 +361,7 @@ trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-o
 <div class="section level4">
 <h4 id="optional-view-the-umaps-of-the-subsetted-data-">Optional: view the umaps of the subsetted data.<a class="anchor" aria-label="anchor" href="#optional-view-the-umaps-of-the-subsetted-data-"></a>
 </h4>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">pre_subset_Tcell.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"celltype"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Subsetted Pre-treatment"</span><span class="op">)</span></span>
 <span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">post_subset_Tcell.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"celltype"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
@@ -243,7 +373,7 @@ trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-o
 <div class="section level3">
 <h3 id="process-the-atlas-data-using-seurat-">Process the atlas data using Seurat.<a class="anchor" aria-label="anchor" href="#process-the-atlas-data-using-seurat-"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Scale Data</span></span>
 <span><span class="co"># this will be replaced by SCTRANSFORM</span></span>
 <span><span class="co"># Has been replaced by SCTransform()</span></span>
@@ -259,7 +389,7 @@ trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-o
 <div class="section level4">
 <h4 id="optional-view-the-umaps-of-the-processed-atlas-data-">Optional: view the umaps of the processed atlas data.<a class="anchor" aria-label="anchor" href="#optional-view-the-umaps-of-the-processed-atlas-data-"></a>
 </h4>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">DimPlot</span><span class="op">(</span>object <span class="op">=</span> <span class="va">atlas_subset_exhaustion.seu</span>, reduction <span class="op">=</span> <span class="st">"umap"</span>, group.by <span class="op">=</span> <span class="st">"lv1_annot"</span> ,label <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Subsetted and processed Atlas"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -267,7 +397,7 @@ trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-o
 <div class="section level3">
 <h3 id="convert-the-seurat-objects-to-singlecellexperiment-objects-">Convert the Seurat objects to SingleCellExperiment objects.<a class="anchor" aria-label="anchor" href="#convert-the-seurat-objects-to-singlecellexperiment-objects-"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># converting the pre-treatment patient data to SCE.</span></span>
 <span><span class="va">pre.sce</span> <span class="op">&lt;-</span> <span class="fu">as.SingleCellExperiment</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
 <span></span>
@@ -281,7 +411,7 @@ trajectory of interest.<a class="anchor" aria-label="anchor" href="#subset-the-o
 <h3 id="use-slingshot-to-produce-an-exhaustion-trajectory-for-the-tcells-">Use slingshot to produce an exhaustion Trajectory for the
 Tcells.<a class="anchor" aria-label="anchor" href="#use-slingshot-to-produce-an-exhaustion-trajectory-for-the-tcells-"></a>
 </h3>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Run slingshot on the Atlas data.</span></span>
 <span><span class="va">atlas_sling.sce</span>  <span class="op">&lt;-</span> <span class="fu">slingshot</span><span class="op">(</span><span class="va">atlas.sce</span>, </span>
 <span>                                   clusterLabels <span class="op">=</span> <span class="st">"lv1_annot"</span>, </span>
@@ -292,13 +422,13 @@ Tcells.<a class="anchor" aria-label="anchor" href="#use-slingshot-to-produce-an-
 <h5 id="check">Check:<a class="anchor" aria-label="anchor" href="#check"></a>
 </h5>
 <p>Not sure if I Want to keep this .</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">atlas_sling.sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="plot-the-trajectory">Plot the trajectory<a class="anchor" aria-label="anchor" href="#plot-the-trajectory"></a>
 </h4>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Plot the slingshot trajectory.</span></span>
 <span><span class="va">colors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu">brewer.pal</span><span class="op">(</span><span class="fl">11</span>,<span class="st">'Spectral'</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span><span class="va">plotcol</span> <span class="op">&lt;-</span> <span class="va">colors</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">atlas_sling.sce</span><span class="op">$</span><span class="va">slingPseudotime_1</span>, breaks<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">]</span></span>
@@ -310,7 +440,7 @@ Tcells.<a class="anchor" aria-label="anchor" href="#use-slingshot-to-produce-an-
 <h3 id="convert-the-singlecellexperiment-objects-to-geneswitches-objects-">Convert the SingleCellExperiment objects to GeneSwitches
 Objects.<a class="anchor" aria-label="anchor" href="#convert-the-singlecellexperiment-objects-to-geneswitches-objects-"></a>
 </h3>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># convert the pre treatment patient data to a GS obj. </span></span>
 <span><span class="va">pre.gs</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="op">(</span>assays <span class="op">=</span> <span class="fu">List</span><span class="op">(</span>expdata <span class="op">=</span> <span class="fu">logcounts</span><span class="op">(</span><span class="va">pre.sce</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># convert the post treatment patient data to a GS obj. </span></span>
@@ -325,7 +455,7 @@ Objects.<a class="anchor" aria-label="anchor" href="#convert-the-singlecellexper
 </h3>
 <p>When checking if the 0.2 cutoff is appropriate I found there to be
 negative expression…<br><code>{r, eval = FALSE} hist(as.numeric(assays(gs_atlas)$expdata))</code><br></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bn_cutoff</span> <span class="op">&lt;-</span> <span class="fl">0.7</span></span>
 <span><span class="co"># binarize pre treatment patient data</span></span>
 <span><span class="va">pre.gs</span><span class="op">&lt;-</span> <span class="fu">binarize_exp</span><span class="op">(</span><span class="va">pre.gs</span>, fix_cutoff <span class="op">=</span> <span class="cn">TRUE</span>, binarize_cutoff <span class="op">=</span> <span class="va">bn_cutoff</span><span class="op">)</span></span>
@@ -338,7 +468,7 @@ negative expression…<br><code>{r, eval = FALSE} hist(as.numeric(assays(gs_atla
 <h3 id="fit-logistic-regression-and-find-the-switching-pseudo-time-point-for-each-gene">fit logistic regression and find the switching pseudo-time point for
 each gene<a class="anchor" aria-label="anchor" href="#fit-logistic-regression-and-find-the-switching-pseudo-time-point-for-each-gene"></a>
 </h3>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atlas_glm.gs</span> <span class="op">&lt;-</span> <span class="fu">find_switch_logistic_fastglm</span><span class="op">(</span><span class="va">atlas_binerized.gs</span>, downsample <span class="op">=</span> <span class="cn">FALSE</span>, show_warning <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">atlas_glm.gs</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -362,7 +492,7 @@ genes.</em></sub><a class="anchor" aria-label="anchor" href="#currently-using-a-
 <sub><em>currently using a cutoff of 0.005 which gives 148
 genes.</em></sub><a class="anchor" aria-label="anchor" href="#currently-using-a-cutoff-of-0-005-which-gives-148-genes-"></a>
 </h4>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">atlas_filtered.gs</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">atlas_glm.gs</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>,r2cutoff <span class="op">=</span> <span class="fl">0.0000001</span><span class="op">)</span></span>
 <span><span class="va">atlas_filtered.gs</span> <span class="op">&lt;-</span> <span class="fu">filter_switchgenes</span><span class="op">(</span><span class="va">atlas_glm.gs</span>, allgenes <span class="op">=</span> <span class="cn">TRUE</span>, topnum <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">atlas_filtered.gs</span><span class="op">)</span></span></code></pre></div>
@@ -377,7 +507,7 @@ Atlas.<a class="anchor" aria-label="anchor" href="#optional-view-the-timeline-of
 <em>Seems a bit odd, maybe it is to do with using logged expression
 data</em><a class="anchor" aria-label="anchor" href="#seems-a-bit-odd-maybe-it-is-to-do-with-using-logged-expression-data"></a>
 </h4>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot_timeline_ggplot</span><span class="op">(</span><span class="va">atlas_filtered.gs</span>, timedata <span class="op">=</span> <span class="fu">colData</span><span class="op">(</span><span class="va">atlas.gs</span><span class="op">)</span><span class="op">$</span><span class="va">Pseudotime</span>, txtsize <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -385,7 +515,7 @@ data</em><a class="anchor" aria-label="anchor" href="#seems-a-bit-odd-maybe-it-i
 <h3 id="select-evenly-distributed-switching-genes">Select evenly distributed switching genes<a class="anchor" aria-label="anchor" href="#select-evenly-distributed-switching-genes"></a>
 </h3>
 <p>remember to define the minimum time spacing</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gs_scorer_genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_evenly_distributed_switching_genes.html">select_evenly_distributed_switching_genes</a></span><span class="op">(</span><span class="va">gs_atlas_r2005</span>, min_time_spacing <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
