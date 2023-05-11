@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 This workflow will take you through using GSS on "patient data" to identify progression towards Tcell exhaustion. 
 
 ### Necessary Packages for this Example Workflow: 
-```{r, eval=FALSE}
+```{r eval=FALSE}
 #CRAN
 library(Seurat)
 library(RColorBrewer)
@@ -231,7 +231,35 @@ p2 <- DimPlot(atlas.seu, reduction = "umap", label = TRUE, repel = TRUE)
 p1 + p2
 ```
 
+## Convert the atlas seurat object to a SingleCellExperiment object. 
+```{r, eval = FALSE}
+atlas.sce <- as.SingleCellExperiment(atlas.seu)
+```
+
+## Run Slingshot on the atlas SingleCellExperiment object. 
+```{r, eval = FALSE}
+# Run Slingshot
+atlas.sce <- slingshot(atlas.sce, clusterLabels = "lv1_annot", reducedDim = 'UMAP')
+# Plot the Trajectory
+colors <- colorRampPalette(brewer.pal(11,'Spectral')[-6])(100)
+plotcol <- colors[cut(atlas.sce$slingPseudotime_1, breaks=100)]
+plot(reducedDims(atlas.sce)$UMAP, col = plotcol, pch=16, asp = 1)
+#lines(SlingshotDataSet(atlas.sce), lwd=2, col='black')
+```
+
+## Convert the atlas SingleCellExperiment object to a GeneSwitches Object. 
+```{r, eval = FALSE}
+counts <- exp(logcounts(atlas.sce)) - 1
+assay(atlas.sce, "counts") <- counts
+
+atlas.gs <- SingleCellExperiment(assays = List(expdata = logcounts(atlas.sce)))
+colData(atlas.gs)$Pseudotime <- -atlas.sce$slingPseudotime_1
+reducedDims(atlas.gs) <- SimpleList(UMAP = reducedDim(atlas.sce, "UMAP", withDimnames=TRUE))
+```
+
+
 # End of label transfer and integration section
+# Below follows the old method. 
 
 ## Subset the objects to only include celltypes involved in the trajectory of interest. 
 ```{r, eval = FALSE}
