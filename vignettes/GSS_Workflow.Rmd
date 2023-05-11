@@ -172,8 +172,7 @@ DimPlot(object = atlas.seu, reduction = "umap", group.by = "lv1_annot" ,label = 
 #atlas_subset_exhaustion.seu
 atlas.seu <- subset(x = atlas.seu, subset = lv1_annot %in% c("T cells naive",
                                                                                 "CD8 cytotoxic",
-                                                                                "CD8 terminally
-                                                                               exhausted"))
+                                                                                "CD8 terminally exhausted"))
 ```
 
 ## **Split and re-integrate the atlas object**
