@@ -4,7 +4,7 @@
 #' # Combining all cells racing lines after binerization (Owen's way)
 #'     TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive.
 #'
-#' @param list_of_cell_position_frequencies
+#' @param list_of_cell_position_frequencies list_of_cell_position_frequencies produced by racing line builder.
 #'
 #' @return A flat matrix where each column represents a position along a trajectory,
 #'     and each value is proportional to the number of the sample's cells which are at that position.
