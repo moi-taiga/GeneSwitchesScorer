@@ -227,17 +227,17 @@ cell_type prediction.<a class="anchor" aria-label="anchor" href="#remove-cells-f
 </h3>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#pre</span></span>
-<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
-<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
-<span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
+<span><span class="co">#pre.seu &lt;- NormalizeData(pre.seu)</span></span>
+<span><span class="co">#pre.seu &lt;- FindVariableFeatures(pre.seu)</span></span>
+<span><span class="co">#pre.seu &lt;- ScaleData(pre.seu)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">pre.seu</span><span class="op">)</span></span>
 <span><span class="va">pre.seu</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">pre.seu</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span>, min_dist <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
 <span><span class="co">#post</span></span>
-<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
-<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
-<span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
+<span><span class="co">#post.seu &lt;- NormalizeData(post.seu)</span></span>
+<span><span class="co">#post.seu &lt;- FindVariableFeatures(post.seu)</span></span>
+<span><span class="co">#post.seu &lt;- ScaleData(post.seu)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
 <span><span class="va">post.seu</span> <span class="op">&lt;-</span> <span class="fu">FindClusters</span><span class="op">(</span><span class="va">post.seu</span><span class="op">)</span></span>
@@ -291,6 +291,7 @@ Tcell exhaustion trajectory.<a class="anchor" aria-label="anchor" href="#subset-
 <span></span>
 <span><span class="co">## Some Seurat processing on the objects in the new filtered list</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">#Should this not also be SCTransform?</span></span>
 <span>  <span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">NormalizeData</span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span>,</span>
 <span>                                            scale.factor <span class="op">=</span> <span class="fl">10000</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span>  <span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">filtered_atlas_sources</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, selection.method <span class="op">=</span> <span class="st">"vst"</span>, </span>
@@ -311,8 +312,9 @@ Tcell exhaustion trajectory.<a class="anchor" aria-label="anchor" href="#subset-
 <span>                    normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">DefaultAssay</span><span class="op">(</span><span class="va">atlas.seu</span><span class="op">)</span> <span class="op">=</span> <span class="st">"integrated"</span></span>
-<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">ScaleData</span><span class="op">(</span><span class="va">atlas.seu</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">FindVariableFeatures</span><span class="op">(</span><span class="va">atlas.seu</span><span class="op">)</span></span>
+<span><span class="co">#Should this be another SCTRANSFORM?</span></span>
+<span><span class="co">#atlas.seu &lt;- ScaleData(atlas.seu, verbose = FALSE)</span></span>
+<span><span class="co">#atlas.seu &lt;- FindVariableFeatures(atlas.seu)</span></span>
 <span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">RunPCA</span><span class="op">(</span><span class="va">atlas.seu</span>, npcs <span class="op">=</span> <span class="fl">30</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">RunUMAP</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
 <span><span class="va">atlas.seu</span> <span class="op">&lt;-</span> <span class="fu">FindNeighbors</span><span class="op">(</span><span class="va">atlas.seu</span>, reduction <span class="op">=</span> <span class="st">"pca"</span>, dims <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span></span>
