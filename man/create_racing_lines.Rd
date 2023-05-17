@@ -13,9 +13,9 @@ create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)
 }
 \value{
 A list of matrices: A matrix for each cell where the columns represent progress through a trajectory,
-    and the rows represent genes, values indicate a likely position of the cell upon the trajectory based that genes bianrized expression.
+and the rows represent genes, values indicate a likely position of the cell upon the trajectory based that genes bianrized expression.
 }
 \description{
 Produces an estimate for the position on trajectory of each gene in each cell of a sample.
-    This can be later aggregated to estimate the position of the sample along the trajectory.
+This can be later aggregated to estimate the position of the sample along the trajectory.
 }

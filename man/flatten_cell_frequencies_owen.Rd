@@ -7,13 +7,17 @@
 flatten_cell_frequencies_owen(list_of_cell_position_frequencies)
 }
 \arguments{
-\item{list_of_cell_position_frequencies}{}
+\item{list_of_cell_position_frequencies}{list_of_cell_position_frequencies produced by racing line builder.}
 }
 \value{
 A flat matrix where each column represents a position along a trajectory,
-    and each value is proportional to the number of the sample's cells which are at that position.
+and each value is proportional to the number of the sample's cells which are at that position.
 }
 \description{
-# Combining all cells racing lines after binerization (Owen's way)
-    TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive.
+Title flatten_cell_frequencies_owen
 }
+\section{Combining all cells racing lines after binerization (Owen's way)}{
+\if{html}{\out{<div class="sourceCode">}}\preformatted{TODO make the high-points into single points in order to makae the yaxis of the final plot more intuitive.
+}\if{html}{\out{</div>}}
+}
+
