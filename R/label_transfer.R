@@ -8,8 +8,6 @@
 #'
 #' @return The Query object with new predicted cell types.
 #' @export
-#'
-#' @examples
 label_transfer <- function(query, reference) {
   ## Find transfer anchors
   anchors <- FindTransferAnchors(
