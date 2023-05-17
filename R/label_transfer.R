@@ -30,7 +30,7 @@ label_transfer <- function(query, reference) {
   )
 
   ## Remove cells from the patient data which don't have a confident cell_type prediction.
-  query <- subset(query, subset = predicted.cell_type.score > 0.65)
+  query <- subset(query, subset = query$predicted.cell_type.score > 0.65)
 
   ## Process the patient data using Seurat
 

@@ -18,3 +18,5 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)
+Imports: 
+    Seurat
