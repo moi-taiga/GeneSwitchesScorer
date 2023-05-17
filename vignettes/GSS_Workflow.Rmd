@@ -82,7 +82,7 @@ pre.seu <- subset(pre.seu, subset = nFeature_RNA > 200)
 # While using this data I am having to edit sctransforms source code :/
 # Use `fixInNamespace("make_cell_attr", "sctransform")`
 # Change identical to setequal.
-atlas.seu <- SCTransform(atlas.seu, verbose = FALSE)
+atlas.seu <- SCTransform(atlas.seu, method = "glmGamPoi", verbose = FALSE)
 ```
 
 ## Find transfer anchors for the patient data
