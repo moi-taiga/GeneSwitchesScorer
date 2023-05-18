@@ -82,6 +82,7 @@ pre.seu <- subset(pre.seu, subset = nFeature_RNA > 200)
 # While using this data I am having to edit sctransforms source code :/
 # Use `fixInNamespace("make_cell_attr", "sctransform")`
 # Change identical to setequal.
+# do we need to transform here if its being done after splitting?
 atlas.seu <- SCTransform(atlas.seu, method = "glmGamPoi", verbose = FALSE)
 # I imagine this would also need to be done for the patient data if it has not already
 pre.seu <- SCTransform(pre.seu, method = "glmGamPoi", verbose = FALSE)
@@ -221,9 +222,9 @@ atlas.seu <- IntegrateData(anchorset = seuAnch, dims = 1:30,
                     normalization.method = "LogNormalize")
 
 DefaultAssay(atlas.seu) = "integrated"
-#Should this be another SCTRANSFORM?
-#atlas.seu <- ScaleData(atlas.seu, verbose = FALSE)
-#atlas.seu <- FindVariableFeatures(atlas.seu)
+#Should this be another SCTRANSFORM? no ScaleData or  FindVariableFeatures
+atlas.seu <- ScaleData(atlas.seu, verbose = FALSE)
+atlas.seu <- FindVariableFeatures(atlas.seu)
 atlas.seu <- RunPCA(atlas.seu, npcs = 30, verbose = FALSE)
 atlas.seu <- RunUMAP(atlas.seu, reduction = "pca", dims = 1:30)
 atlas.seu <- FindNeighbors(atlas.seu, reduction = "pca", dims = 1:30)
@@ -234,6 +235,7 @@ atlas.seu <- FindClusters(atlas.seu, resolution = 0.5)
 ```{r, eval = FALSE}
 p1 <- DimPlot(atlas.seu, reduction = "umap", group.by = "lv1_annot")
 p2 <- DimPlot(atlas.seu, reduction = "umap", label = TRUE, repel = TRUE)
+p2 <- DimPlot(atlas.seu, reduction = "umap", group.by = "source")
 p1 + p2
 ```
 
