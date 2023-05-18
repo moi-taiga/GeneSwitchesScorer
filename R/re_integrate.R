@@ -1,25 +1,29 @@
 
 #' Re Integrate
+#' Splits a Seurat object into a list of Seurat objects to integrate,
+#' Performs SCTransform normalization separately for each Seurat object,
+#' Runs the PrepSCTIntegration function on the object list,
+#' Integrates datasets.
 #'
-#' @import
-#' @param seu
+#' @import Seurat
+#' @param seu Subsetted Seurat object that you want to re-integrate
+#' @param ncell_cutoff Minimum number of cells per split object
 #'
-#' @return
+#' @return Re-integrated Seurat Object.
 #' @export
-re_integrate <- function(seu) {
-  ## **Split and re-integrate the atlas object**
+re_integrate <- function(seu, ncell_cutoff) {
 
   ## Split the atlast object by source.
   split.seu <- SplitObject(seu, split.by = "source")
 
-  ## Loop (backwards) through the `split.seu` and remove objects which have less than 100 cells.
+  ## Loop (backwards) through the `split.seu` and remove objects which have less than the chosen cutoff.
   # Start the loop from the last index and iterate backward to the first index
   for (i in length(split.seu):1) {
     # Get the number of cells in the Seurat object
     num_cells <- dim(split.seu[[i]]@assays$RNA@counts)[2]
 
-    # Check if the number of cells is less than 100
-    if (num_cells < 100) {
+    # Check if the number of cells is less than the chosen cutoff.
+    if (num_cells < ncell_cutoff) {
       # Remove the Seurat object from the list
       split.seu <- split.seu[-i]
     }
