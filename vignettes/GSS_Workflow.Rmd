@@ -235,8 +235,8 @@ atlas.seu <- FindClusters(atlas.seu, resolution = 0.5)
 ```{r, eval = FALSE}
 p1 <- DimPlot(atlas.seu, reduction = "umap", group.by = "lv1_annot")
 p2 <- DimPlot(atlas.seu, reduction = "umap", label = TRUE, repel = TRUE)
-p2 <- DimPlot(atlas.seu, reduction = "umap", group.by = "source")
-p1 + p2
+p3 <- DimPlot(atlas.seu, reduction = "umap", group.by = "source")
+p1 + p2 +p3
 ```
 
 ## Convert the atlas seurat object to a SingleCellExperiment object. 
