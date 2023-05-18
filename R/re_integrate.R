@@ -65,10 +65,10 @@ re_integrate <- function(object, ncell_cutoff) {
 
   object.integrated <- RunPCA(object.integrated, verbose = FALSE)
   object.integrated <- RunUMAP(object.integrated, dims = 1:30)
-  plots <- DimPlot(object.integrated, group.by = c("source", "lv1_annot"), combine = FALSE)
-  plots <- lapply(X = plots, FUN = function(x) x + theme(legend.position = "top") + guides(color = guide_legend(nrow = 3,
-                                                                                                                byrow = TRUE, override.aes = list(size = 3))))
-  CombinePlots(plots)
+
+  ## Plot
+  # DimPlot(object.integrated, group.by = c("source", "lv1_annot"), combine = TRUE)
+
 
 }
 
