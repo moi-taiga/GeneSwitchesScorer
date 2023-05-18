@@ -2,46 +2,50 @@
 #' Re Integrate
 #'
 #' @import
-#' @param query
-#' @param reference
+#' @param seu
 #'
 #' @return
 #' @export
-label_transfer <- function(query, reference) {
-
-
-
-
-
-  ## **Subset, Split and re-integrate the atlas object**
-  ## Subset the atlas data to only include celltypes involved in the Tcell exhaustion trajectory.
-  # Subsetting the Atlas data into 3 types of Tcells for the exhaustion trajectory.
-  atlas.seu <- subset(x = atlas.seu, subset = lv1_annot %in% c("T cells naive",
-                                                               "CD8 cytotoxic",
-                                                               "CD8 terminally exhausted"))
-
+re_integrate <- function(seu) {
+  ## **Split and re-integrate the atlas object**
 
   ## Split the atlast object by source.
-  atlas_sources <- SplitObject(atlas.seu, split.by = "source")
+  split.seu <- SplitObject(seu, split.by = "source")
 
-  ## Make an empty list to store the filtered seurat objects
-  filtered_atlas_sources <- list()
+  ## Loop (backwards) through the `split.seu` and remove objects which have less than 100 cells.
+  # Start the loop from the last index and iterate backward to the first index
+  for (i in length(split.seu):1) {
+    # Get the number of cells in the Seurat object
+    num_cells <- dim(split.seu[[i]]@assays$RNA@counts)[2]
 
-  ## Loop through the `atlas_sources` and add objects which have more than 100 cells to the new list.
-  for (i in 1:length(atlas_sources)) {
-    # Check the number of cells in the Seurat object
-    num_cells <- dim(atlas_sources[[i]]@assays$RNA@counts)[2]
-    # If the number of cells is less than 100, skip this Seurat object
+    # Check if the number of cells is less than 100
     if (num_cells < 100) {
-      next
+      # Remove the Seurat object from the list
+      split.seu <- split.seu[-i]
     }
-    # Otherwise, add the Seurat object to the filtered list
-    filtered_atlas_sources[[length(filtered_atlas_sources)+1]] <- atlas_sources[[i]]
   }
 
   ## Run SCTransform on each object in the list
-  for (i in 1:length(filtered_atlas_sources)) {
-    filtered_atlas_sources[[i]] <- SCTransform(filtered_atlas_sources[[i]], method = "glmGamPoi", verbose = FALSE)
+  for (i in 1:length(split.seu)) {
+    split.seu[[i]] <- SCTransform(split.seu[[i]], method = "glmGamPoi", verbose = FALSE)
+  }
+
+  ## Run SCTransform on each object in the list
+  for (i in 1:length(atlas_sources)) {
+    tryCatch({
+      atlas_sources[[i]] <- SCTransform(atlas_sources[[i]], method = "glmGamPoi", verbose = FALSE)
+    }, error = function(e) {
+      message <- paste("Error occurred while applying SCTransform to Seurat object", i, ":")
+      message <- paste0(message,
+                       e$message,
+                       "\n",
+                       "To resolve this error Use \`fixInNamespace(\"make_cell_attr\", \"sctransform\")\` to change !identical to !setequal.",
+                       "\n",
+                       "This is expected to be default in the next update of Seurat",
+                       "\n",
+                       "\n")
+      cat(message)
+    })
   }
 
   #
@@ -67,29 +71,29 @@ label_transfer <- function(query, reference) {
 
 
   ## Intregrate all genes common between snRNA and scRNA.
-  seuAnch <- FindIntegrationAnchors(filtered_atlas_sources, anchor.features = 1500,
+  seuAnch <- FindIntegrationAnchors(filtered_split.seu, anchor.features = 1500,
                                     normalization.method = "LogNormalize",
                                     reduction = "cca", dims = 1:30,
                                     k.anchor = 5, k.filter = 200,
                                     k.score = 30, max.features = 200)
 
-  atlas.seu <- IntegrateData(anchorset = seuAnch, dims = 1:30,
+  seu <- IntegrateData(anchorset = seuAnch, dims = 1:30,
                              normalization.method = "LogNormalize")
 
-  DefaultAssay(atlas.seu) = "integrated"
+  DefaultAssay(seu) = "integrated"
   #Should this be another SCTRANSFORM?
-  #atlas.seu <- ScaleData(atlas.seu, verbose = FALSE)
-  #atlas.seu <- FindVariableFeatures(atlas.seu)
-  atlas.seu <- SCTransform(atlas.seu, method = "glmGamPoi", verbose = FALSE)
-  atlas.seu <- RunPCA(atlas.seu, npcs = 30, verbose = FALSE)
-  atlas.seu <- RunUMAP(atlas.seu, reduction = "pca", dims = 1:30)
-  atlas.seu <- FindNeighbors(atlas.seu, reduction = "pca", dims = 1:30)
-  atlas.seu <- FindClusters(atlas.seu, resolution = 0.5)
+  #seu <- ScaleData(seu, verbose = FALSE)
+  #seu <- FindVariableFeatures(seu)
+  seu <- SCTransform(seu, method = "glmGamPoi", verbose = FALSE)
+  seu <- RunPCA(seu, npcs = 30, verbose = FALSE)
+  seu <- RunUMAP(seu, reduction = "pca", dims = 1:30)
+  seu <- FindNeighbors(seu, reduction = "pca", dims = 1:30)
+  seu <- FindClusters(seu, resolution = 0.5)
 
 
   ### Plot
-  p1 <- DimPlot(atlas.seu, reduction = "umap", group.by = "lv1_annot")
-  p2 <- DimPlot(atlas.seu, reduction = "umap", label = TRUE, repel = TRUE)
+  p1 <- DimPlot(seu, reduction = "umap", group.by = "lv1_annot")
+  p2 <- DimPlot(seu, reduction = "umap", label = TRUE, repel = TRUE)
   p1 + p2
 
 
