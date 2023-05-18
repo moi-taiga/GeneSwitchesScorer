@@ -35,9 +35,9 @@ re_integrate <- function(seu, ncell_cutoff) {
   }
 
   ## Run SCTransform on each object in the list
-  for (i in 1:length(atlas_sources)) {
+  for (i in 1:length(split.seu)) {
     tryCatch({
-      atlas_sources[[i]] <- SCTransform(atlas_sources[[i]], method = "glmGamPoi", verbose = FALSE)
+      split.seu[[i]] <- SCTransform(split.seu[[i]], method = "glmGamPoi", verbose = FALSE)
     }, error = function(e) {
       message <- paste("Error occurred while applying SCTransform to Seurat object", i, ":")
       message <- paste0(message,
@@ -53,10 +53,9 @@ re_integrate <- function(seu, ncell_cutoff) {
   }
 
 
+  ## Select features for downstream integration, and run PrepSCTIntegration, which ensures that all necessary Pearson residuals have been calculated.
   #
-  # Next, select features for downstream integration, and run PrepSCTIntegration, which ensures that all necessary Pearson residuals have been calculated.
-  #
-  # pancreas.features <- SelectIntegrationFeatures(object.list = pancreas.list, nfeatures = 3000)
+  pancreas.features <- SelectIntegrationFeatures(object.list = pancreas.list, nfeatures = 3000)
   # pancreas.list <- PrepSCTIntegration(object.list = pancreas.list, anchor.features = pancreas.features,
   #                                     verbose = FALSE)
   # Next, identify anchors and integrate the datasets. Commands are identical to the standard workflow, but make sure to set normalization.method = 'SCT':
