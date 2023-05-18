@@ -48,6 +48,7 @@ re_integrate <- function(seu) {
     })
   }
 
+
   #
   # Next, select features for downstream integration, and run PrepSCTIntegration, which ensures that all necessary Pearson residuals have been calculated.
   #
