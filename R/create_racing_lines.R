@@ -24,8 +24,8 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
     for (g in 1:number_of_switching_genes){
       #print(paste(g,"out of", number_of_switching_genes, "switching genes"))
       #find out the switch time Gt, and direction Gd
-      switching_time <- as.numeric(gs_scorer_genes[g,3])
-      switching_direction <- gs_scorer_genes[g,2]
+      switching_time <- as.numeric(gs_scorer_genes[g,12])
+      switching_direction <- gs_scorer_genes[g,10]
       #find out if its expressed Ct
       is_expressed <- reduced_binary_counts_matrix[g,c]
       #If Ct = TRUE
