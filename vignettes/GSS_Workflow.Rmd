@@ -419,3 +419,12 @@ remember to define the minimum time spacing
 ```{r, eval = FALSE}
 gs_scorer_genes <- select_evenly_distributed_switching_genes(gs_atlas_r2005, min_time_spacing = 5)
 ```
+
+ 
+## Reduce the binary counts matricies of the query data to only include the selection of evenly distributed genes from the refernence.
+```{r, eval = FALSE}
+fibroblast.gs   <- filter_gene_expression_for_switching_genes(fibroblast.gs,gs_scorer_genes = gss_genes)
+mixed.gs        <- filter_gene_expression_for_switching_genes(mixed.gs,gs_scorer_genes = gss_genes)
+early_primed.gs <- filter_gene_expression_for_switching_genes(early_primed.gs,gs_scorer_genes = gss_genes)
+primed_reduced.gs       <- filter_gene_expression_for_switching_genes(primed.gs,gs_scorer_genes = gss_genes)
+```
