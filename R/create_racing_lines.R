@@ -12,13 +12,22 @@
 #' @export
 #'
 create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
+
+  ## Input values:
   number_of_cells <- dim(reduced_binary_counts_matrix)[2]
+  # Should we get the number of switching genes from here? or dim(reduced_binary_counts_matrix)[1]
+  # It is possible for dim(reduced_binary_counts_matrix)[1] <  dim(gs_scorer_genes)[1]
   number_of_switching_genes <- dim(gs_scorer_genes)[1]
 
-  all_patients_cells_scored <- vector("list", number_of_cells)
 
+  # Different datasets store this information in different columns.. watch out.
+  # Maybe this should be an input to the function?
+  # as.numeric is needed/notneeded depending on dataset.
   switching_time <- as.numeric(gs_scorer_genes[, 12])
   switching_direction <- gs_scorer_genes[, 10]
+
+  # Building the final list. (faster than building it dynamically.)
+  all_patients_cells_scored <- vector("list", number_of_cells)
 
   for (c in 1:number_of_cells) {
    racing_mat <- matrix(0, nrow = number_of_switching_genes, ncol = 100)
