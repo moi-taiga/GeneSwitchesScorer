@@ -28,15 +28,19 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
 
   # Building the final list. (faster than building it dynamically.)
   all_patients_cells_scored <- vector("list", number_of_cells)
+  all_patients_cells_scored <- vector("list", 2)
 
+  # Loop through all cells making matrices for each,
+  #which represent likely position of a cell on a trajectory based on the expression of each gene.
   for (c in 1:number_of_cells) {
+    # Build the matrix of 0's which has genes as rows and pseudotime indecies as columns.
    racing_mat <- matrix(0, nrow = number_of_switching_genes, ncol = 100)
-    binarized_gene_expression <- reduced_binary_counts_matrix[, c]
+    binarized_gene_expression_for_cell_c <- reduced_binary_counts_matrix[, c]
 
-    up_indices <- which(binarized_gene_expression == 1 & switching_direction == "up")
-    down_indices <- which(binarized_gene_expression == 1 & switching_direction == "down")
-    not_up_indices <- which(binarized_gene_expression == 0 & switching_direction == "up")
-    not_down_indices <- which(binarized_gene_expression == 0 & switching_direction == "down")
+    up_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "up")
+    down_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "down")
+    not_up_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "up")
+    not_down_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "down")
 
     if (length(up_indices) > 0) {
       racing_mat[up_indices, switching_time[up_indices]:100] <- 1
