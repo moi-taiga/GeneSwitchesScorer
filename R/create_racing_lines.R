@@ -35,6 +35,7 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
   for (c in 1:number_of_cells) {
     # Build the matrix of 0's which has genes as rows and pseudotime indecies as columns.
    racing_mat <- matrix(0, nrow = number_of_switching_genes, ncol = 100)
+   rownames(racing_mat) <- rownames(reduced_binary_counts_matrix)
     binarized_gene_expression_for_cell_c <- reduced_binary_counts_matrix[, c]
 
     up_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "up")
