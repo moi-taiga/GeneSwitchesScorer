@@ -28,6 +28,7 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
 
   # Building the final list. (faster than building it dynamically.)
   all_patients_cells_scored <- vector("list", number_of_cells)
+  names(all_patients_cells_scored) <- colnames(reduced_binary_counts_matrix)
   #all_patients_cells_scored <- vector("list", 2)
 
   # Loop through all cells making matrices for each,
