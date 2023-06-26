@@ -39,16 +39,16 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
     binarized_gene_expression_for_cell_c <- reduced_binary_counts_matrix[, c]
 
     up_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "up")
-    down_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "down")
+    down_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "down")
     not_up_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "up")
-    not_down_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "down")
+    not_down_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "down")
 
     if (length(up_indices) > 0) {
       racing_mat[up_indices, switching_time[up_indices]:100] <- 1
     }
 
     if (length(down_indices) > 0) {
-      racing_mat[down_indices, 1:switching_time[down_indices]] <- 1
+      racing_mat[not_down_indices, switching_time[not_down_indices]:100] <- 1
     }
 
     if (length(not_up_indices) > 0) {
@@ -56,7 +56,7 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
     }
 
     if (length(not_down_indices) > 0) {
-      racing_mat[not_down_indices, switching_time[not_down_indices]:100] <- 1
+      racing_mat[down_indices, 1:switching_time[down_indices]] <- 1
     }
 
     all_patients_cells_scored[[c]] <- racing_mat
