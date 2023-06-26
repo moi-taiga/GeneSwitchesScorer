@@ -13,6 +13,10 @@
 #'
 create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
 
+  ## Reorder gs_scorer_genes
+  # as the code relies on the rownames and idicies of the genes in reduced_binary_counts_matrix and gs_scorer_genes matching.
+  gs_scorer_genes <- gs_scorer_genes[rownames(reduced_binary_counts_matrix),]
+
   ## Input values:
   number_of_cells <- dim(reduced_binary_counts_matrix)[2]
   # Should we get the number of switching genes from here? or dim(reduced_binary_counts_matrix)[1]
@@ -43,20 +47,20 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
     not_up_indices <- which(binarized_gene_expression_for_cell_c == 0 & switching_direction == "up")
     not_down_indices <- which(binarized_gene_expression_for_cell_c == 1 & switching_direction == "down")
 
-    if (length(up_indices) > 0) {
-      racing_mat[up_indices, switching_time[up_indices]:100] <- 1
+    for (i in up_indices) {
+      racing_mat[i, switching_time[i]:100] <- 1
     }
 
-    if (length(down_indices) > 0) {
-      racing_mat[not_down_indices, switching_time[not_down_indices]:100] <- 1
+    for (i in down_indices) {
+      racing_mat[i, switching_time[i]:100] <- 1
     }
 
-    if (length(not_up_indices) > 0) {
-      racing_mat[not_up_indices, 1:switching_time[not_up_indices]] <- 1
+    for (i in not_up_indices) {
+      racing_mat[i, 1:switching_time[i]] <- 1
     }
 
-    if (length(not_down_indices) > 0) {
-      racing_mat[down_indices, 1:switching_time[down_indices]] <- 1
+    for (i in not_down_indices) {
+      racing_mat[i, 1:switching_time[i]] <- 1
     }
 
     all_patients_cells_scored[[c]] <- racing_mat
