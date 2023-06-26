@@ -66,4 +66,5 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
     all_patients_cells_scored[[c]] <- racing_mat
   }
   return(all_patients_cells_scored)
+
 }
