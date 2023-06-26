@@ -23,8 +23,8 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
   # Different datasets store this information in different columns.. watch out.
   # Maybe this should be an input to the function?
   # as.numeric is needed/notneeded depending on dataset.
-  switching_time <- as.numeric(gs_scorer_genes[, 12])
-  switching_direction <- gs_scorer_genes[, 10]
+  switching_time <- as.numeric(gs_scorer_genes$switch_at_timeidx)
+  switching_direction <- gs_scorer_genes$direction
 
   # Building the final list. (faster than building it dynamically.)
   all_patients_cells_scored <- vector("list", number_of_cells)
