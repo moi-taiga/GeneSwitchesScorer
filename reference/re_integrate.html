@@ -79,13 +79,17 @@ Integrates datasets.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">re_integrate</span><span class="op">(</span><span class="va">seu</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">re_integrate</span><span class="op">(</span><span class="va">object</span>, <span class="va">ncell_cutoff</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>seu</dt>
+    <dl><dt>object</dt>
 <dd><p>Subsetted Seurat object that you want to re-integrate</p></dd>
+
+
+<dt>ncell_cutoff</dt>
+<dd><p>Minimum number of cells per split object</p></dd>
 
 </dl></div>
     <div class="section level2">
