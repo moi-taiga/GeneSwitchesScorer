@@ -8,10 +8,12 @@ Performs SCTransform normalization separately for each Seurat object,
 Runs the PrepSCTIntegration function on the object list,
 Integrates datasets.}
 \usage{
-re_integrate(seu)
+re_integrate(object, ncell_cutoff)
 }
 \arguments{
-\item{seu}{Subsetted Seurat object that you want to re-integrate}
+\item{object}{Subsetted Seurat object that you want to re-integrate}
+
+\item{ncell_cutoff}{Minimum number of cells per split object}
 }
 \value{
 Re-integrated Seurat Object.
