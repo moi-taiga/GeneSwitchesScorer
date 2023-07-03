@@ -5,30 +5,30 @@
 #'     This can be later aggregated to estimate the position of the sample along the trajectory.
 #'
 #' @param reduced_binary_counts_matrix a matrix of your samples binary gene expression.
-#' @param gs_scorer_genes Switching genes which are evenly distributed through pseudotime.
+#' @param gss_genes Switching genes which are evenly distributed through pseudotime.
 #'
 #' @return A list of matrices: A matrix for each cell where the columns represent progress through a trajectory,
 #'     and the rows represent genes, values indicate a likely position of the cell upon the trajectory based that genes bianrized expression.
 #' @export
 #'
-create_racing_lines <- function(reduced_binary_counts_matrix,gs_scorer_genes) {
+create_racing_lines <- function(reduced_binary_counts_matrix,gss_genes) {
 
-  ## Reorder gs_scorer_genes
-  # as the code relies on the rownames and idicies of the genes in reduced_binary_counts_matrix and gs_scorer_genes matching.
-  gs_scorer_genes <- gs_scorer_genes[rownames(reduced_binary_counts_matrix),]
+  ## Reorder gss_genes
+  # as the code relies on the rownames and idicies of the genes in reduced_binary_counts_matrix and gss_genes matching.
+  gss_genes <- gss_genes[rownames(reduced_binary_counts_matrix),]
 
   ## Input values:
   number_of_cells <- dim(reduced_binary_counts_matrix)[2]
   # Should we get the number of switching genes from here? or dim(reduced_binary_counts_matrix)[1]
-  # It is possible for dim(reduced_binary_counts_matrix)[1] <  dim(gs_scorer_genes)[1]
-  number_of_switching_genes <- dim(gs_scorer_genes)[1]
+  # It is possible for dim(reduced_binary_counts_matrix)[1] <  dim(gss_genes)[1]
+  number_of_switching_genes <- dim(gss_genes)[1]
 
 
   # Different datasets store this information in different columns.. watch out.
   # Maybe this should be an input to the function?
   # as.numeric is needed/notneeded depending on dataset.
-  switching_time <- as.numeric(gs_scorer_genes$switch_at_timeidx)
-  switching_direction <- gs_scorer_genes$direction
+  switching_time <- as.numeric(gss_genes$switch_at_timeidx)
+  switching_direction <- gss_genes$direction
 
   # Building the final list. (faster than building it dynamically.)
   all_patients_cells_scored <- vector("list", number_of_cells)
