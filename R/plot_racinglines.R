@@ -1,13 +1,12 @@
 #' @title Identify and Visualise each cells position.
 #'
 #' @description
-#' Produces a plot for each cell which helps visualise how GSS is predicting the cells postion.
+#' Produces a plot for each cell which helps visualize how GSS is predicting the cells position.
 #'
 #' @param reduced_binary_counts_matrix a matrix of your samples binary gene expression.
-#' @param gs_scorer_genes Switching genes which are evenly distributed through pseudotime.
+#' @param gss_genes A selection of switching genes which are evenly distributed through pseudo-time.
 #'
-#' @return A list of matrices: A matrix for each cell where the columns represent progress through a trajectory,
-#'     and the rows represent genes, values indicate a likely position of the cell upon the trajectory based that genes bianrized expression.
+#' @return Plot of selected cell
 #' @import ggplot2
 #' @import ggrepel
 #'
@@ -15,25 +14,17 @@
 #' @export
 #'
 
+racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell = n, full_time_IDX = TRUE) {
 
-
-# To look at the racing lines of only one cell you need to make sure it still has the right matrix format.
-fib_red <- matrix(fibroblast_reduced[, 1], ncol = 1, dimnames = list(rownames(fibroblast_reduced), colnames(fibroblast_reduced)[1]))
-fib_lines   <- create_racing_lines(fib_red, gss_genes)
-#
-
-
-###################################### Use Pdeudotime IDX ############################################################################################
-
-gss_genes <- gss_genes_tmp
-reduced_binary_counts_matrix <- fibroblast_reduced
-racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, full_time_IDX = TRUE) {
-
-  # Convert tml to a data frame
+  # Convert gss_genes to a data frame
   gss_genes <- as.data.frame(gss_genes)
 
   # Order gss_genes by switch_at_timeidx column
-  gss_genes <- gss_genes[order(gss_genes$switch_at_timeidx), ]
+  #gss_genes <- gss_genes[order(gss_genes$switch_at_timeidx), ]
+
+  ## Reorder gss_genes
+  # as the code relies on the rownames and idicies of the genes in reduced_binary_counts_matrix and gss_genes matching.
+  gss_genes <- gss_genes[rownames(reduced_binary_counts_matrix),]
 
   # Add a new column direction_num and set it to -1
   gss_genes$direction_num <- -1
@@ -72,49 +63,40 @@ racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, full_t
 
   # Customize the theme and legend appearance
   timeline_plot <- timeline_plot + theme(legend.position = "bottom", legend.title = element_blank(), legend.key.size = unit(10, "pt"),
-                               text = element_text(size = 12, family = "Helvetica"))
+                               text = element_text(size = 12))
 
-  # title the plot the name of the cell.
-  timeline_plot <- timeline_plot + ggtitle(colnames(fib_red)[1])
 
-  #
-  timeline_plot
-  # if G1 is expressed in C1 and the switch is UP then draw the line to the right.
-  # if G1 is expressed in C1 and the switch is Down then draw the line to the Left.
-  # if G1 is NOT expressed in C1 and the switch is UP then draw the line to the right.
-  # if G1 is NOT expressed in C1 and the switch is Down then draw the line to the Left.
 
-  #this needs to be changed to refer to the sample.
 
-  lined_plot <- timeline_plot
-
-  for (i in 1:dim(fib_red)[1]) {
-    if ((fib_red[rownames(gss_genes)[i], 1] == 0) && (gss_genes$direction[i] == "up")) {
-      lined_plot <- lined_plot + geom_segment(aes_string(x = 0, xend = gss_genes$switch_at_timeidx[i], y = gss_genes$pseudoR2s[i], yend = gss_genes$pseudoR2s[i]),
-                                              color = "blue", size = 0.8)
+  #loop through all of the genes in gss_genes.
+    for (g in 1:dim(gss_genes)[1]) {
+      # if G is NOT expressed in  C, and the switch is UP  , then draw the line to the right.
+      if ((reduced_binary_counts_matrix[rownames(gss_genes)[g], cell] == 0) && (gss_genes$direction[g] == "up")) {
+        timeline_plot <- timeline_plot + geom_segment(aes_string(x = 0, xend = gss_genes$switch_at_timeidx[g], y = gss_genes$pseudoR2s[g], yend = gss_genes$pseudoR2s[g]),
+                                                      color = "blue", size = 0.8)
+      }
+      # if G is expressed in      c, and the switch is UP  , then draw the line to the right.
+      if ((reduced_binary_counts_matrix[rownames(gss_genes)[g], cell] == 1) && (gss_genes$direction[g] == "up")) {
+        timeline_plot <- timeline_plot + geom_segment(aes_string(x = gss_genes$switch_at_timeidx[g], xend = 100, y = gss_genes$pseudoR2s[g], yend = gss_genes$pseudoR2s[g]),
+                                                      color = "blue", size = 0.8)
+      }
+      # if G is NOT expressed in  C, and the switch is Down, then draw the line to the Left.
+      if ((reduced_binary_counts_matrix[rownames(gss_genes)[g], cell] == 0) && (gss_genes$direction[g] == "down")) {
+        timeline_plot <- timeline_plot + geom_segment(aes_string(x = gss_genes$switch_at_timeidx[g], xend = 100, y = -gss_genes$pseudoR2s[g], yend = -gss_genes$pseudoR2s[g]),
+                                                      color = "blue", size = 0.8)
+      }
+      # if G is expressed in      C, and the switch is Down, then draw the line to the Left.
+      if ((reduced_binary_counts_matrix[rownames(gss_genes)[g], cell] == 1) && (gss_genes$direction[g] == "down")) {
+        timeline_plot <- timeline_plot + geom_segment(aes_string(x = 0, xend = gss_genes$switch_at_timeidx[g], y = -gss_genes$pseudoR2s[g], yend = -gss_genes$pseudoR2s[g]),
+                                                      color = "blue", size = 0.8)
+      }
     }
 
-    if ((fib_red[rownames(gss_genes)[i], 1] == 1) && (gss_genes$direction[i] == "up")) {
-      lined_plot <- lined_plot + geom_segment(aes_string(x = gss_genes$switch_at_timeidx[i], xend = 100, y = gss_genes$pseudoR2s[i], yend = gss_genes$pseudoR2s[i]),
-                                              color = "blue", size = 0.8)
-    }
+# Title the plot with the name of the cell
+timeline_plot <- timeline_plot + ggtitle(colnames(reduced_binary_counts_matrix)[cell])
 
-    if ((fib_red[rownames(gss_genes)[i], 1] == 0) && (gss_genes$direction[i] == "down")) {
-      lined_plot <- lined_plot + geom_segment(aes_string(x = gss_genes$switch_at_timeidx[i], xend = 100, y = -gss_genes$pseudoR2s[i], yend = -gss_genes$pseudoR2s[i]),
-                                              color = "blue", size = 0.8)
-    }
+# Return the final plot
+return(timeline_plot)
 
-    if ((fib_red[rownames(gss_genes)[i], 1] == 1) && (gss_genes$direction[i] == "down")) {
-      lined_plot <- lined_plot + geom_segment(aes_string(x = 0, xend = gss_genes$switch_at_timeidx[i], y = -gss_genes$pseudoR2s[i], yend = -gss_genes$pseudoR2s[i]),
-                                              color = "blue", size = 0.8)
-    }
-  }
-
-  lined_plot
-
-
-
-
-  # Return the final plot
-  return(lined_plot)
 }
+
