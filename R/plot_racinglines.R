@@ -5,8 +5,10 @@
 #'
 #' @param reduced_binary_counts_matrix a matrix of your samples binary gene expression.
 #' @param gss_genes A selection of switching genes which are evenly distributed through pseudo-time.
+#' @param cell The index (or name?) of the cell of interest
+#' @param full_time_IDX Do you want the scale to go from Min to Max or from 0-100.
 #'
-#' @return Plot of selected cell
+#' @return Timeline plot of selected cell
 #' @import ggplot2
 #' @import ggrepel
 #'
@@ -14,7 +16,7 @@
 #' @export
 #'
 
-racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell = n, full_time_IDX = TRUE) {
+racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell = 1, full_time_IDX = TRUE) {
 
   # Convert gss_genes to a data frame
   gss_genes <- as.data.frame(gss_genes)
