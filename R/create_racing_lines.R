@@ -13,6 +13,13 @@
 #'
 create_racing_lines <- function(reduced_binary_counts_matrix,gss_genes) {
 
+  ## The final output will be a gss_obj (list) comprised of 3 objects.
+  # Make the list of length 3, and name the objects
+  gss_obj <- vector("list", 3)
+  names(gss_obj) <- c("racing_lines","cells_flat","sample_flat")
+  # Assign the gss_obj class attribute to the list
+  class(gss_obj) <- "GSS_OBJECT"
+
   ## Reorder gss_genes
   # as the code relies on the rownames and idicies of the genes in reduced_binary_counts_matrix and gss_genes matching.
   gss_genes <- gss_genes[rownames(reduced_binary_counts_matrix),]
@@ -30,7 +37,7 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gss_genes) {
   switching_time <- as.numeric(gss_genes$switch_at_timeidx)
   switching_direction <- gss_genes$direction
 
-  # Building the final list. (faster than building it dynamically.)
+  # Building the racing lines list. (faster than building it dynamically.)
   all_patients_cells_scored <- vector("list", number_of_cells)
   names(all_patients_cells_scored) <- colnames(reduced_binary_counts_matrix)
 
@@ -65,6 +72,17 @@ create_racing_lines <- function(reduced_binary_counts_matrix,gss_genes) {
 
     all_patients_cells_scored[[c]] <- racing_mat
   }
-  return(all_patients_cells_scored)
 
+  gss_obj$racing_lines <- all_patients_cells_scored
+
+### RACING LINES CREATED
+# Now flatten:
+
+# Use lapply to calculate column sums for each matrix
+gss_obj$cells_flat <- do.call(rbind, lapply(all_patients_cells_scored, colSums))
+rownames(gss_obj$cells_flat) <- names(all_patients_cells_scored)
+# Combine each cells column sums into a single flat matrix.
+gss_obj$sample_flat <- matrix(colSums(gss_obj$cells_flat), nrow = 1)
+
+return(gss_obj)
 }
