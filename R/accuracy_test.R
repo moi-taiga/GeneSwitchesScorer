@@ -8,6 +8,6 @@
 #'
 #' @return
 #' @export
-score_gss_accuracy <- function(fib_flat, gss_genes) {
-  which.max(colSums(fib_flat))
+score_gss_accuracy <- function(fib_lines, gss_genes) {
+  which.max(colSums(fib_lines))
 }
