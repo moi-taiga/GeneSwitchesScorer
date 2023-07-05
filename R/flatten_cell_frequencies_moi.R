@@ -17,9 +17,9 @@ flatten_cell_frequencies_moi <- function(list_of_cell_position_frequencies) {
   for (i in 1:length(list_of_cell_position_frequencies)) {
     all_patient_cells_scored_flat <- all_patient_cells_scored_flat + colSums(list_of_cell_position_frequencies[[i]])
   }
-  # divide the values in the flat matrix by the number of cells in an attempt to make the yaxis more informative.
-  # This may be the wrong approach but it shouldnt change the shape of the final plot
-  #all_patient_cells_scored_flat <- all_patient_cells_scored_flat/length_of_list
-
   return(all_patient_cells_scored_flat)
 }
+
+
+
+
