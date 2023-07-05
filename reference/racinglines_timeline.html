@@ -59,7 +59,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">racinglines_timeline</span><span class="op">(</span></span>
 <span>  <span class="va">gss_genes</span>,</span>
 <span>  <span class="va">reduced_binary_counts_matrix</span>,</span>
-<span>  cell <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  cell <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  full_time_IDX <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -73,12 +73,20 @@
 <dt>reduced_binary_counts_matrix</dt>
 <dd><p>a matrix of your samples binary gene expression.</p></dd>
 
+
+<dt>cell</dt>
+<dd><p>The index (or name?) of the cell of interest</p></dd>
+
+
+<dt>full_time_IDX</dt>
+<dd><p>Do you want the scale to go from Min to Max or from 0-100.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Plot of selected cell</p>
+<p>Timeline plot of selected cell</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
