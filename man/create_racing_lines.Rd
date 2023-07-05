@@ -4,12 +4,12 @@
 \alias{create_racing_lines}
 \title{Identify the "racing lines"}
 \usage{
-create_racing_lines(reduced_binary_counts_matrix, gs_scorer_genes)
+create_racing_lines(reduced_binary_counts_matrix, gss_genes)
 }
 \arguments{
 \item{reduced_binary_counts_matrix}{a matrix of your samples binary gene expression.}
 
-\item{gs_scorer_genes}{Switching genes which are evenly distributed through pseudotime.}
+\item{gss_genes}{Switching genes which are evenly distributed through pseudotime.}
 }
 \value{
 A list of matrices: A matrix for each cell where the columns represent progress through a trajectory,
