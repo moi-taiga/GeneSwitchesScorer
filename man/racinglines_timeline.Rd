@@ -7,7 +7,7 @@
 racinglines_timeline(
   gss_genes,
   reduced_binary_counts_matrix,
-  cell = n,
+  cell = 1,
   full_time_IDX = TRUE
 )
 }
@@ -15,9 +15,13 @@ racinglines_timeline(
 \item{gss_genes}{A selection of switching genes which are evenly distributed through pseudo-time.}
 
 \item{reduced_binary_counts_matrix}{a matrix of your samples binary gene expression.}
+
+\item{cell}{The index (or name?) of the cell of interest}
+
+\item{full_time_IDX}{Do you want the scale to go from Min to Max or from 0-100.}
 }
 \value{
-Plot of selected cell
+Timeline plot of selected cell
 }
 \description{
 Produces a plot for each cell which helps visualize how GSS is predicting the cells position.

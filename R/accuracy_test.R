@@ -6,8 +6,8 @@
 #' @param fib_flat flattened sample data
 #' @param gss_genes
 #'
-#' @return
+#' @return A score for how accurate the reults are.
 #' @export
-score_gss_accuracy <- function(fib_lines, gss_genes) {
+score_gss_accuracy <- function(gss_obj) {
   which.max(colSums(fib_lines))
 }
