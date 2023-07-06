@@ -9,5 +9,12 @@
 #' @return A score for how accurate the reults are.
 #' @export
 score_gss_accuracy <- function(gss_obj) {
-  which.max(colSums(fib_lines))
-}
+
+  cells_names <- rownames(gss_obj$cells_flat)
+
+
+  predicted_position_of_cells_timeIDX <- apply(gss_obj$cells_flat, 1, which.max)
+
+  #this needs converting to IDX
+  true_position_of_cells_pseudotime <- reference.sce@colData$slingPseudotime_1
+  }
