@@ -16,7 +16,7 @@
 #' @export
 #'
 
-racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell = 1, full_time_IDX = TRUE) {
+racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell = 1) {
 
   # Convert gss_genes to a data frame
   gss_genes <- as.data.frame(gss_genes)
@@ -37,13 +37,8 @@ racinglines_timeline <- function(gss_genes, reduced_binary_counts_matrix, cell =
   }
 
   # Generate pseudotime data based on the specified parameters
-  if (full_time_IDX) {
     timeidx_df <- data.frame(timeidx_range = c(0, 25, 50, 75, 100), timeidx_labs = c(0, 25, 50, 75, 100))
-  } else {
-    timeidx_step <- (max(gss_genes$switch_at_timeidx) - min(gss_genes$switch_at_timeidx))/4
-    timeidx_range <- seq(min(gss_genes$switch_at_timeidx), max(gss_genes$switch_at_timeidx), by = timeidx_step)
-    timeidx_df <- data.frame(timeidx_range, timeidx_labs = round(timeidx_range, 1))
-  }
+
 
   # Create the initial ggplot object with x and y aesthetics, color, and labels
   timeline_plot <- ggplot(gss_genes, aes(x = switch_at_timeidx, y = pseudoR2s * direction_num, label = rownames(gss_genes))) +
