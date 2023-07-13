@@ -1,12 +1,51 @@
-#' Title
+#' GSS OUTPUT PLOT
 #'
-#' @param fibroblast_flat flattend sample data
+#' @description
+#' Plots the predicted positon of your sample.
 #'
-#' @return nice plot highlighting the probable position of your sample on your trajectory
+#' @param sample.gss A GSS_OBJECT of the sample you wish to plot
+#' @param col The colour that you'd like
+#' @param overlay set to TRUE if you would like this plot to overlay a previous plot.
+#'
+#' @return nice plot highlighting the probable position of your sample on your trajectory.
 #' @export
 #'
-gss_output_plot <- function(fibroblast_flat){
-  #TODO: include an easy option to compare two samples.
-  plot(x = 1:ncol(fibroblast_flat), y = fibroblast_flat[1,], type = "h", xlab = "Pseudotime Index", ylab = "Cell Position Likelyhood", main = "Trajectory Progress of \"fibroblast\"")
-  abline(v = which.max(colSums(fib_flat)), lwd = 1, col = "Red")
+gss_output_plot <- function(sample.gss, col = "lightblue", overlay = TRUE){
+col <- col
+
+ if (!overlay) {
+  plot(x = 1:100,
+       y = (sample.gss$sample_flat/max(sample.gss$sample_flat)*100),
+       ylim = c(0,100),
+       pch = 20,
+       cex = 0.8,
+       col = col,
+       type = "p",
+       xlab = "Pseudo-Time Index",
+       ylab = "GSS Score",
+       main = "Predicted Position of Sample")
+
+  segments(which.max(colSums(sample.gss$sample_flat)),
+           -3.9,
+           which.max(colSums(sample.gss$sample_flat)),
+           (sample.gss$sample_flat[which.max(colSums(sample.gss$sample_flat))]/max(sample.gss$sample_flat)*100),
+           lwd=1,
+           col = col)
+ } else {
+   lines( x = 1:100,
+          y = (sample.gss$sample_flat/max(sample.gss$sample_flat)*100),
+        pch = 20,
+        cex = 0.8,
+        col = col,
+        type = "p")
+
+   segments(which.max(colSums(sample.gss$sample_flat)),
+            -3.9,
+            which.max(colSums(sample.gss$sample_flat)),
+            (sample.gss$sample_flat[which.max(colSums(sample.gss$sample_flat))]/max(sample.gss$sample_flat)*100),
+            lwd=1,
+            col = col)
+   }
+
 }
+
